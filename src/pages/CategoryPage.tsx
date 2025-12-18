@@ -1,0 +1,377 @@
+// src/pages/CategoryPage.tsx
+import { useState, useEffect } from "react";
+import { useParams, Link, useNavigate, NavLink } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  FaCartPlus,
+  FaFilter,
+  FaSortAmountDown,
+  FaWineGlassAlt,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
+
+// Import dữ liệu
+import { PRODUCTS_DATA } from "../data/mockData";
+
+// Import ảnh (Giữ nguyên như code của bạn)
+import RedWineBanner from "../assets/images/redwine_banner.jpg";
+import WhiskeyBanner from "../assets/images/whiskey_banner.jpg";
+import WineBanner from "../assets/images/all_wine_banner.jpg";
+import WhiteWineBanner from "../assets/images/white_wine.jpg";
+import ChampagneWineBanner from "../assets/images/champagnewine_banner.jpg";
+import VodkaWineBanner from "../assets/images/vodkawine_banner.jpg";
+
+// --- CẤU HÌNH SỐ LƯỢNG SẢN PHẨM MỖI TRANG ---
+const ITEMS_PER_PAGE = 10;
+
+// Cấu hình Banner & Info
+const CATEGORY_INFO: Record<
+  string,
+  { title: string; desc: string; banner: string }
+> = {
+  "all-products": {
+    title: "Grand Collection",
+    desc: "Khám phá toàn bộ kho tàng hương vị thượng hạng của Webie Wine. Từ những hầm rượu vang cổ kính đến những dòng rượu mạnh đầy cá tính.",
+    banner: WineBanner,
+  },
+  "red-wine": {
+    title: "Red Wines",
+    desc: "Khám phá sự đậm đà, quyến rũ của những chai vang đỏ từ Bordeaux đến Napa Valley.",
+    banner: RedWineBanner,
+  },
+  "white-wine": {
+    title: "White Wines",
+    desc: "Sự tươi mát, thanh thoát từ những giống nho Chardonnay, Sauvignon Blanc trứ danh.",
+    banner: WhiteWineBanner,
+  },
+  champagne: {
+    title: "Fine Champagne",
+    desc: "Biểu tượng của sự ăn mừng và đẳng cấp thượng lưu từ vùng Champagne nước Pháp.",
+    banner: ChampagneWineBanner,
+  },
+  whiskey: {
+    title: "Premium Whiskey",
+    desc: "Từ Single Malt khói than bùn Scotland đến Bourbon ngọt ngào của Mỹ.",
+    banner: WhiskeyBanner,
+  },
+  cognac: {
+    title: "Exquisite Cognac",
+    desc: "Dòng rượu mạnh quý tộc ủ lâu năm trong thùng gỗ sồi Pháp.",
+    banner:
+      "https://images.unsplash.com/photo-1615887023516-9b6bcd559e87?q=80&w=1600&auto=format&fit=crop",
+  },
+  vodka: {
+    title: "Luxury Vodka",
+    desc: "Sự tinh khiết tuyệt đối, hoàn hảo cho mọi ly cocktail đẳng cấp.",
+    banner: VodkaWineBanner,
+  },
+  rum: {
+    title: "Caribbean Rum",
+    desc: "Hương vị của biển cả và những hòn đảo nhiệt đới.",
+    banner:
+      "https://images.unsplash.com/photo-1614313511387-1436a4480ebb?q=80&w=1600&auto=format&fit=crop",
+  },
+  default: {
+    title: "Our Collections",
+    desc: "Tuyển chọn những hương vị tinh túy nhất thế giới.",
+    banner:
+      "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?q=80&w=1600&auto=format&fit=crop",
+  },
+};
+
+const QUICK_CATEGORIES = [
+  { id: "all-products", name: "All" },
+  { id: "red-wine", name: "Red Wine" },
+  { id: "white-wine", name: "White Wine" },
+  { id: "champagne", name: "Champagne" },
+  { id: "whiskey", name: "Whiskey" },
+  { id: "vodka", name: "Vodka" },
+  { id: "rum", name: "Rum" },
+];
+
+export default function CategoryPage() {
+  const { slug } = useParams();
+  const navigate = useNavigate();
+
+  // --- STATE PHÂN TRANG ---
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // 1. Reset trang về 1 khi đổi danh mục
+  useEffect(() => {
+    setCurrentPage(1);
+    window.scrollTo(0, 0);
+  }, [slug]);
+
+  const isViewAll = slug === "all-products";
+  const info = CATEGORY_INFO[slug as string] || CATEGORY_INFO["default"];
+
+  // 2. Lấy danh sách sản phẩm theo danh mục
+  const allFilteredProducts = isViewAll
+    ? PRODUCTS_DATA
+    : PRODUCTS_DATA.filter((p) => p.category === slug);
+
+  // 3. Tính toán Logic Phân trang
+  const totalItems = allFilteredProducts.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+
+  // Vị trí cắt mảng
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+
+  // Danh sách sản phẩm hiển thị trên trang hiện tại
+  const currentProducts = allFilteredProducts.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  // Hàm chuyển trang
+  // Hàm chuyển trang
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+
+    // --- ĐOẠN LOGIC SCROLL ---
+    // Tìm phần tử có id là "product-grid-start" và cuộn tới đó
+    const gridElement = document.getElementById("product-grid-start");
+    if (gridElement) {
+      // scrollIntoView: Cuộn phần tử đó vào tầm nhìn
+      // block: "start" nghĩa là mép trên phần tử chạm mép trên màn hình
+      // behavior: "smooth" để trượt mượt mà
+      gridElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    // -------------------------
+  };
+
+  return (
+    <div className="bg-[#050505] min-h-screen text-white font-sans selection:bg-[#D4AF37] selection:text-black">
+      {/* Header import sẵn trong HomeTemplate rồi nên ở đây không cần gọi lại nếu dùng Outlet, 
+          nhưng nếu bạn không dùng layout chung thì giữ nguyên Header/Footer */}
+
+      {/* --- HERO BANNER --- */}
+      <div className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={info.banner}
+            alt={info.title}
+            className="w-full h-full object-cover transition-transform duration-[10s] hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-[#050505]"></div>
+        </div>
+
+        <div className="relative z-10 text-center px-4 mt-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex justify-center mb-4"
+          >
+            <FaWineGlassAlt className="text-[#D4AF37] text-3xl" />
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl md:text-7xl font-serif font-medium mb-4 tracking-tight"
+          >
+            {info.title}
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-white/70 max-w-xl mx-auto font-light leading-relaxed text-lg"
+          >
+            {info.desc}
+          </motion.p>
+        </div>
+      </div>
+
+      {/* --- TOOLBAR & FILTER --- */}
+      {/* Thêm ID để scroll tới đây khi chuyển trang */}
+      <div
+        id="product-grid-start"
+        className="top-[70px] md:top-[80px] z-40 bg-[#050505]/95 backdrop-blur border-b border-white/5 transition-all shadow-lg shadow-black/50"
+      >
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            {/* Quick Nav */}
+            <div className="overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+              <div className="flex gap-2">
+                {QUICK_CATEGORIES.map((cat) => (
+                  <NavLink
+                    key={cat.id}
+                    to={`/collections/${cat.id}`}
+                    className={({ isActive }) =>
+                      `whitespace-nowrap px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition-all ${
+                        isActive || (isViewAll && cat.id === "all-products")
+                          ? "bg-[#D4AF37] text-black border-[#D4AF37]"
+                          : "bg-transparent text-white/60 border-white/10 hover:border-white/30 hover:text-white"
+                      }`
+                    }
+                  >
+                    {cat.name}
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Tools & Counter */}
+            <div className="flex items-center justify-between md:justify-end gap-6 border-t border-white/5 md:border-none pt-4 md:pt-0">
+              <p className="text-white/50 text-xs font-light">
+                Showing{" "}
+                <span className="text-[#D4AF37] font-bold">
+                  {totalItems > 0 ? indexOfFirstItem + 1 : 0}
+                </span>{" "}
+                -{" "}
+                <span className="text-[#D4AF37] font-bold">
+                  {Math.min(indexOfLastItem, totalItems)}
+                </span>{" "}
+                of <span className="text-white font-bold">{totalItems}</span>{" "}
+                Products
+              </p>
+              <div className="flex gap-4">
+                <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/70 hover:text-[#D4AF37] transition-colors">
+                  <FaFilter /> Filter
+                </button>
+                <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/70 hover:text-[#D4AF37] transition-colors">
+                  <FaSortAmountDown /> Sort
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* --- PRODUCT GRID --- */}
+      <main className="container mx-auto px-6 py-16">
+        {currentProducts.length > 0 ? (
+          <>
+            {/* Grid Sản Phẩm */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
+              {currentProducts.map((item, idx) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ delay: idx * 0.05, duration: 0.4 }}
+                  className="group cursor-pointer"
+                  onClick={() => navigate(`/product/${item.id}`)}
+                >
+                  <div className="relative bg-[#0f0f0f] border border-white/5 h-[360px] rounded-sm overflow-hidden hover:border-[#D4AF37]/50 transition-all duration-500">
+                    {/* Badge */}
+                    <div className="absolute top-3 left-3 z-20">
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-white/40 border border-white/10 px-2 py-1 rounded-sm bg-black/50 backdrop-blur-sm">
+                        {item.category}
+                      </span>
+                    </div>
+
+                    {/* Spotlight & Image */}
+                    <div className="absolute inset-0 flex items-center justify-center p-6">
+                      <div className="absolute w-32 h-32 bg-[#D4AF37]/20 rounded-full blur-[50px] opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="h-[80%] object-contain drop-shadow-xl group-hover:scale-110 group-hover:-rotate-2 transition-transform duration-500 ease-out z-10"
+                      />
+                    </div>
+
+                    {/* Add to Cart */}
+                    <div className="absolute bottom-0 left-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Logic add to cart
+                        }}
+                        className="w-full bg-[#D4AF37] text-black font-bold uppercase text-[10px] py-4 hover:bg-white transition-colors flex items-center justify-center gap-2 tracking-widest"
+                      >
+                        <FaCartPlus /> Quick Add
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Info */}
+                  <div className="mt-4 px-1">
+                    <h3 className="text-base font-serif text-white group-hover:text-[#D4AF37] transition-colors leading-tight mb-1 truncate">
+                      {item.name}
+                    </h3>
+                    <div className="flex justify-between items-center">
+                      <p className="text-white/60 text-sm font-medium">
+                        {item.price.toLocaleString()}{" "}
+                        <span className="text-xs">₫</span>
+                      </p>
+                      <div className="w-6 h-[1px] bg-white/10 group-hover:bg-[#D4AF37] transition-colors"></div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* --- PAGINATION CONTROLS (Thêm mới) --- */}
+            {totalPages > 1 && (
+              <div className="mt-20 flex justify-center items-center gap-3">
+                {/* Previous Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`w-10 h-10 flex items-center justify-center rounded-full border transition-all ${
+                    currentPage === 1
+                      ? "border-white/10 text-white/20 cursor-not-allowed"
+                      : "border-white/20 text-white hover:border-[#D4AF37] hover:text-[#D4AF37]"
+                  }`}
+                >
+                  <FaChevronLeft size={12} />
+                </button>
+
+                {/* Page Numbers */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`w-10 h-10 flex items-center justify-center rounded-full border text-xs font-bold transition-all ${
+                        currentPage === page
+                          ? "bg-[#D4AF37] border-[#D4AF37] text-black"
+                          : "bg-transparent border-white/20 text-white hover:border-[#D4AF37] hover:text-[#D4AF37]"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
+
+                {/* Next Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`w-10 h-10 flex items-center justify-center rounded-full border transition-all ${
+                    currentPage === totalPages
+                      ? "border-white/10 text-white/20 cursor-not-allowed"
+                      : "border-white/20 text-white hover:border-[#D4AF37] hover:text-[#D4AF37]"
+                  }`}
+                >
+                  <FaChevronRight size={12} />
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="text-center py-20 bg-white/5 rounded-2xl border border-white/5">
+            <h3 className="text-2xl font-serif text-white mb-2">
+              Collection Empty
+            </h3>
+            <p className="text-white/50 mb-6">
+              Chưa có sản phẩm nào trong danh mục này.
+            </p>
+            <Link
+              to="/collections/all-products"
+              className="px-6 py-2 border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all font-bold uppercase text-xs tracking-widest"
+            >
+              View All Collection
+            </Link>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
