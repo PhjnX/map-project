@@ -449,9 +449,9 @@ export default function OrderPage() {
     if (dist > 15) {
       setModalStatus({
         show: true,
-        type: "error",
-        title: "Quá Xa",
-        message: "Hiện tại Webie chưa hỗ trợ giao > 15km.",
+        type: "warning",
+        title: "Hơn 15km",
+        message: "Vì khoảng cách vượt quá 15km, shop sẽ thu phí ship đặc biệt.",
       });
     }
   };
