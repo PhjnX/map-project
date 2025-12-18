@@ -1,4 +1,3 @@
-// src/components/LoginModal.tsx
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes, FaSpinner, FaGoogle, FaFacebookF } from "react-icons/fa";
@@ -31,7 +30,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Style riêng để xử lý vụ Autofill bị nền trắng của Chrome */}
           <style>{`
             input:-webkit-autofill,
             input:-webkit-autofill:hover, 
@@ -50,7 +48,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             }
           `}</style>
 
-          {/* 1. OVERLAY */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -59,7 +56,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             className="fixed inset-0 bg-[#050505]/90 backdrop-blur-sm z-[60]"
           />
 
-          {/* 2. MODAL CONTAINER */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -67,25 +63,19 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[900px] h-auto md:h-[500px] bg-[#0a0a0a] border border-[#D4AF37]/20 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] z-[70] flex overflow-hidden"
           >
-            {/* --- CỘT TRÁI: ẢNH NGHỆ THUẬT --- */}
-            {/* --- CỘT TRÁI: ẢNH NGHỆ THUẬT (Đã sửa lỗi đen thui) --- */}
             <div className="hidden md:block w-5/12 relative overflow-hidden">
-              {/* 1. Ảnh gốc: Bỏ opacity và mix-blend để hiển thị rõ */}
               <img
                 src="https://assets.hweb.wine/img/type/sparkling-wine-la-gi-20240105110828-e.jpg"
                 alt="Wine Pouring"
                 className="w-full h-full object-cover"
               />
 
-              {/* 2. Lớp phủ làm tối: Giúp ảnh tối đi để chữ màu trắng/vàng nổi bật hơn */}
               <div className="absolute inset-0 bg-black/50"></div>
 
-              {/* 3. Gradient: Tạo độ sâu ở dưới đáy */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
+              <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
 
-              {/* Nội dung chữ đè lên ảnh */}
               <div className="absolute bottom-10 left-0 right-0 text-center px-8 z-10">
-                <div className="w-8 h-[1px] bg-[#D4AF37] mx-auto mb-4"></div>
+                <div className="w-8 h-px bg-[#D4AF37] mx-auto mb-4"></div>
                 <p className="font-serif text-[#E0E0E0] text-xl italic tracking-wide leading-relaxed drop-shadow-lg">
                   "Good wine is a necessity of life for me."
                 </p>
@@ -95,7 +85,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               </div>
             </div>
 
-            {/* --- CỘT PHẢI: FORM --- */}
             <div className="w-full md:w-7/12 p-10 md:p-14 relative flex flex-col justify-center bg-[#0a0a0a]">
               <button
                 onClick={onClose}
@@ -114,7 +103,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-8">
-                {/* Input Email - Floating Label Style */}
                 <div className="input-group relative">
                   <input
                     type="email"
@@ -129,7 +117,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   </label>
                 </div>
 
-                {/* Input Password */}
                 <div className="input-group relative">
                   <input
                     type="password"
@@ -166,7 +153,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-[#D4AF37] to-[#B38728] text-[#0a0a0a] font-bold uppercase tracking-[0.25em] py-4 text-[10px] hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                  className="w-full bg-linear-to-r from-[#D4AF37] to-[#B38728] text-[#0a0a0a] font-bold uppercase tracking-[0.25em] py-4 text-[10px] hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                 >
                   {isLoading ? (
                     <FaSpinner className="animate-spin" />

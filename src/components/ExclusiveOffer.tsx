@@ -1,4 +1,3 @@
-// src/components/ExclusiveOffer.tsx
 import { motion } from "framer-motion";
 
 export default function ExclusiveOffer() {
@@ -10,13 +9,11 @@ export default function ExclusiveOffer() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
-          className="relative bg-gradient-to-r from-[#111] to-[#050505] border border-white/5 rounded-2xl overflow-hidden p-8 md:p-16 flex flex-col md:flex-row items-center gap-12"
+          className="relative bg-linear-to-r from-[#111] to-[#050505] border border-white/5 rounded-2xl overflow-hidden p-8 md:p-16 flex flex-col md:flex-row items-center gap-12"
         >
-          {/* ... (Phần Background Texture & Glow giữ nguyên) ... */}
           <div className="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none"></div>
           <div className="absolute top-1/2 right-1/4 w-[400px] h-[400px] bg-blue-900/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-          {/* Left Content (Slide Up) */}
           <motion.div
             className="w-full md:w-1/2 relative z-10"
             initial={{ opacity: 0, y: 30 }}
@@ -29,7 +26,7 @@ export default function ExclusiveOffer() {
             </span>
             <h2 className="text-4xl md:text-6xl font-serif text-white mb-6 leading-none">
               Johnnie Walker <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#8a6e1e]">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-[#D4AF37] to-[#8a6e1e]">
                 Blue Label
               </span>
             </h2>
@@ -60,7 +57,6 @@ export default function ExclusiveOffer() {
             </button>
           </motion.div>
 
-          {/* Right Image (Slide in from Right) */}
           <div className="w-full md:w-1/2 flex justify-center relative z-10">
             <div className="absolute w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[80px]"></div>
 

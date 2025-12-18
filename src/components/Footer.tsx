@@ -1,4 +1,3 @@
-// src/components/Footer.tsx
 import {
   FaFacebookF,
   FaInstagram,
@@ -11,7 +10,6 @@ export default function Footer() {
   return (
     <footer className="bg-[#050505] text-white/60 border-t border-white/5 pt-20 pb-10">
       <div className="container mx-auto px-6">
-        {/* TOP SECTION: NEWSLETTER & BRAND */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/5 pb-16 mb-16 gap-10">
           <div className="max-w-lg">
             <h3 className="text-[#D4AF37] font-bold uppercase tracking-[0.2em] text-xs mb-4">
@@ -32,7 +30,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* BIG FOOTER LOGO */}
           <div className="hidden md:block text-right">
             <h2 className="font-serif text-5xl font-black text-white/10 tracking-widest uppercase select-none">
               Webie
@@ -42,9 +39,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* MIDDLE SECTION: LINKS */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
-          {/* Column 1: About */}
           <div className="space-y-6">
             <h4 className="text-white font-serif font-bold text-lg">
               About Us
@@ -75,7 +70,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Shop */}
           <div>
             <h4 className="text-white font-serif font-bold text-lg mb-6">
               Shop
@@ -116,7 +110,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Support */}
           <div>
             <h4 className="text-white font-serif font-bold text-lg mb-6">
               Support
@@ -157,7 +150,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Contact */}
           <div>
             <h4 className="text-white font-serif font-bold text-lg mb-6">
               Contact
@@ -180,7 +172,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* BOTTOM SECTION: COPYRIGHT */}
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-widest font-bold text-white/30">
           <p>&copy; 2025 Webie Cellars. All rights reserved.</p>
           <p className="text-[#D4AF37]">Drink Responsibly • 18+</p>

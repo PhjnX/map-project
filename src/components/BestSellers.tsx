@@ -1,4 +1,3 @@
-// src/components/BestSellers.tsx
 import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +9,6 @@ import {
   FaEye,
 } from "react-icons/fa";
 
-// 1. IMPORT DỮ LIỆU GỐC (Single Source of Truth)
 import { PRODUCTS_DATA } from "../data/mockData";
 
 export default function BestSellers() {
@@ -18,11 +16,8 @@ export default function BestSellers() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
 
-  // 2. LẤY 10-12 SẢN PHẨM ĐẦU TIÊN LÀM BEST SELLER
-  // (Hoặc bạn có thể filter theo tiêu chí rating cao, isNew, v.v...)
   const bestSellers = PRODUCTS_DATA.slice(0, 12);
 
-  // --- LOGIC AUTO SCROLL (Giữ nguyên) ---
   useEffect(() => {
     if (isPaused) return;
 
@@ -52,11 +47,9 @@ export default function BestSellers() {
 
   return (
     <section className="bg-[#050505] py-24 border-b border-white/5 relative overflow-hidden">
-      {/* Background Decor */}
       <div className="absolute right-0 bottom-0 w-96 h-96 bg-[#D4AF37]/5 blur-[120px] pointer-events-none"></div>
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* HEADER & NAV BUTTONS */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <motion.div
             className="text-center md:text-left"
@@ -95,7 +88,6 @@ export default function BestSellers() {
           </motion.div>
         </div>
 
-        {/* --- PRODUCT SLIDER --- */}
         <motion.div
           ref={scrollRef}
           onMouseEnter={() => setIsPaused(true)}
@@ -111,14 +103,11 @@ export default function BestSellers() {
             <motion.div
               key={item.id}
               className="group min-w-[280px] md:min-w-[300px] snap-start relative cursor-pointer"
-              // 3. ĐIỀU HƯỚNG SANG TRANG DETAIL (ID này giờ đã khớp với mockData)
               onClick={() => navigate(`/product/${item.id}`)}
             >
               <div className="relative bg-[#0a0a0a] border border-white/10 h-[420px] flex flex-col justify-between overflow-hidden transition-all duration-500 group-hover:border-[#D4AF37]">
-                {/* 1. Top Info */}
                 <div className="flex justify-between items-start p-5 z-20">
                   <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest border border-white/10 px-2 py-1 group-hover:text-[#D4AF37] group-hover:border-[#D4AF37] transition-colors">
-                    {/* Sửa: item.cat -> item.category */}
                     {item.category}
                   </span>
                   <button
@@ -131,12 +120,10 @@ export default function BestSellers() {
                   </button>
                 </div>
 
-                {/* 2. Product Image */}
-                <div className="absolute inset-0 flex items-center justify-center top-[-20px]">
+                <div className="absolute inset-0 flex items-center justify-center -top-5">
                   <div className="absolute w-40 h-40 bg-[#D4AF37]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
                   <img
-                    // Sửa: item.img -> item.image
                     src={item.image}
                     alt={item.name}
                     className="h-[65%] object-contain drop-shadow-xl z-10 transition-all duration-700 ease-out 
@@ -148,20 +135,17 @@ export default function BestSellers() {
                   />
                 </div>
 
-                {/* 3. Bottom Info & Buttons */}
-                <div className="relative z-20 bg-gradient-to-t from-black via-black/95 to-transparent p-5 pt-12 mt-auto">
+                <div className="relative z-20 bg-linear-to-t from-black via-black/95 to-transparent p-5 pt-12 mt-auto">
                   <div className="translate-y-4 group-hover:translate-y-[-50px] transition-transform duration-500 ease-out">
                     <h3 className="text-white font-serif text-xl leading-tight mb-1 group-hover:text-[#D4AF37] transition-colors line-clamp-1">
                       {item.name}
                     </h3>
                     <p className="text-white/50 font-medium text-sm">
-                      {/* item.price là số nên dùng toLocaleString ok */}
                       {item.price.toLocaleString()}
                       <span className="text-[10px] align-top ml-1">₫</span>
                     </p>
                   </div>
 
-                  {/* Buttons Action */}
                   <div className="absolute bottom-0 left-0 w-full px-4 py-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out flex gap-2">
                     <button
                       onClick={(e) => {

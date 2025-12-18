@@ -1,4 +1,3 @@
-// src/pages/CategoryPage.tsx
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -11,10 +10,8 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 
-// Import dữ liệu
 import { PRODUCTS_DATA } from "../data/mockData";
 
-// Import ảnh (Giữ nguyên như code của bạn)
 import RedWineBanner from "../assets/images/redwine_banner.jpg";
 import WhiskeyBanner from "../assets/images/whiskey_banner.jpg";
 import WineBanner from "../assets/images/all_wine_banner.jpg";
@@ -22,10 +19,8 @@ import WhiteWineBanner from "../assets/images/white_wine.jpg";
 import ChampagneWineBanner from "../assets/images/champagnewine_banner.jpg";
 import VodkaWineBanner from "../assets/images/vodkawine_banner.jpg";
 
-// --- CẤU HÌNH SỐ LƯỢNG SẢN PHẨM MỖI TRANG ---
 const ITEMS_PER_PAGE = 10;
 
-// Cấu hình Banner & Info
 const CATEGORY_INFO: Record<
   string,
   { title: string; desc: string; banner: string }
@@ -94,10 +89,8 @@ export default function CategoryPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  // --- STATE PHÂN TRANG ---
   const [currentPage, setCurrentPage] = useState(1);
 
-  // 1. Reset trang về 1 khi đổi danh mục
   useEffect(() => {
     setCurrentPage(1);
     window.scrollTo(0, 0);
@@ -106,48 +99,33 @@ export default function CategoryPage() {
   const isViewAll = slug === "all-products";
   const info = CATEGORY_INFO[slug as string] || CATEGORY_INFO["default"];
 
-  // 2. Lấy danh sách sản phẩm theo danh mục
   const allFilteredProducts = isViewAll
     ? PRODUCTS_DATA
     : PRODUCTS_DATA.filter((p) => p.category === slug);
 
-  // 3. Tính toán Logic Phân trang
   const totalItems = allFilteredProducts.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-  // Vị trí cắt mảng
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
 
-  // Danh sách sản phẩm hiển thị trên trang hiện tại
   const currentProducts = allFilteredProducts.slice(
     indexOfFirstItem,
     indexOfLastItem
   );
 
-  // Hàm chuyển trang
-  // Hàm chuyển trang
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
 
-    // --- ĐOẠN LOGIC SCROLL ---
-    // Tìm phần tử có id là "product-grid-start" và cuộn tới đó
     const gridElement = document.getElementById("product-grid-start");
     if (gridElement) {
-      // scrollIntoView: Cuộn phần tử đó vào tầm nhìn
-      // block: "start" nghĩa là mép trên phần tử chạm mép trên màn hình
-      // behavior: "smooth" để trượt mượt mà
       gridElement.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    // -------------------------
   };
 
   return (
     <div className="bg-[#050505] min-h-screen text-white font-sans selection:bg-[#D4AF37] selection:text-black">
-      {/* Header import sẵn trong HomeTemplate rồi nên ở đây không cần gọi lại nếu dùng Outlet, 
-          nhưng nếu bạn không dùng layout chung thì giữ nguyên Header/Footer */}
-
-      {/* --- HERO BANNER --- */}
+    
       <div className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
@@ -155,7 +133,7 @@ export default function CategoryPage() {
             alt={info.title}
             className="w-full h-full object-cover transition-transform duration-[10s] hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-[#050505]"></div>
+          <div className="absolute inset-0 bg-linear-to-b from-black/80 via-black/40 to-[#050505]"></div>
         </div>
 
         <div className="relative z-10 text-center px-4 mt-10">
@@ -186,15 +164,12 @@ export default function CategoryPage() {
         </div>
       </div>
 
-      {/* --- TOOLBAR & FILTER --- */}
-      {/* Thêm ID để scroll tới đây khi chuyển trang */}
       <div
         id="product-grid-start"
-        className="top-[70px] md:top-[80px] z-40 bg-[#050505]/95 backdrop-blur border-b border-white/5 transition-all shadow-lg shadow-black/50"
+        className="top-[70px] md:top-20 z-40 bg-[#050505]/95 backdrop-blur border-b border-white/5 transition-all shadow-lg shadow-black/50"
       >
         <div className="container mx-auto px-6 py-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            {/* Quick Nav */}
             <div className="overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
               <div className="flex gap-2">
                 {QUICK_CATEGORIES.map((cat) => (
@@ -215,7 +190,6 @@ export default function CategoryPage() {
               </div>
             </div>
 
-            {/* Right Tools & Counter */}
             <div className="flex items-center justify-between md:justify-end gap-6 border-t border-white/5 md:border-none pt-4 md:pt-0">
               <p className="text-white/50 text-xs font-light">
                 Showing{" "}
@@ -242,11 +216,9 @@ export default function CategoryPage() {
         </div>
       </div>
 
-      {/* --- PRODUCT GRID --- */}
       <main className="container mx-auto px-6 py-16">
         {currentProducts.length > 0 ? (
           <>
-            {/* Grid Sản Phẩm */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
               {currentProducts.map((item, idx) => (
                 <motion.div
@@ -259,14 +231,12 @@ export default function CategoryPage() {
                   onClick={() => navigate(`/product/${item.id}`)}
                 >
                   <div className="relative bg-[#0f0f0f] border border-white/5 h-[360px] rounded-sm overflow-hidden hover:border-[#D4AF37]/50 transition-all duration-500">
-                    {/* Badge */}
                     <div className="absolute top-3 left-3 z-20">
                       <span className="text-[9px] font-bold uppercase tracking-widest text-white/40 border border-white/10 px-2 py-1 rounded-sm bg-black/50 backdrop-blur-sm">
                         {item.category}
                       </span>
                     </div>
 
-                    {/* Spotlight & Image */}
                     <div className="absolute inset-0 flex items-center justify-center p-6">
                       <div className="absolute w-32 h-32 bg-[#D4AF37]/20 rounded-full blur-[50px] opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
                       <img
@@ -276,12 +246,10 @@ export default function CategoryPage() {
                       />
                     </div>
 
-                    {/* Add to Cart */}
                     <div className="absolute bottom-0 left-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          // Logic add to cart
                         }}
                         className="w-full bg-[#D4AF37] text-black font-bold uppercase text-[10px] py-4 hover:bg-white transition-colors flex items-center justify-center gap-2 tracking-widest"
                       >
@@ -290,7 +258,6 @@ export default function CategoryPage() {
                     </div>
                   </div>
 
-                  {/* Info */}
                   <div className="mt-4 px-1">
                     <h3 className="text-base font-serif text-white group-hover:text-[#D4AF37] transition-colors leading-tight mb-1 truncate">
                       {item.name}
@@ -300,17 +267,15 @@ export default function CategoryPage() {
                         {item.price.toLocaleString()}{" "}
                         <span className="text-xs">₫</span>
                       </p>
-                      <div className="w-6 h-[1px] bg-white/10 group-hover:bg-[#D4AF37] transition-colors"></div>
+                      <div className="w-6 h-px bg-white/10 group-hover:bg-[#D4AF37] transition-colors"></div>
                     </div>
                   </div>
                 </motion.div>
               ))}
             </div>
 
-            {/* --- PAGINATION CONTROLS (Thêm mới) --- */}
             {totalPages > 1 && (
               <div className="mt-20 flex justify-center items-center gap-3">
-                {/* Previous Button */}
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
@@ -323,7 +288,6 @@ export default function CategoryPage() {
                   <FaChevronLeft size={12} />
                 </button>
 
-                {/* Page Numbers */}
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                   (page) => (
                     <button
@@ -340,7 +304,6 @@ export default function CategoryPage() {
                   )
                 )}
 
-                {/* Next Button */}
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}

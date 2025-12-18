@@ -1,9 +1,7 @@
-// src/components/HeroCarousel.tsx
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaPlay } from "react-icons/fa";
 
-// --- DỮ LIỆU SLIDE (Link TheCocktailDB ổn định, nền trong suốt) ---
 const SLIDES = [
   {
     id: 1,
@@ -14,8 +12,8 @@ const SLIDES = [
       "Mellowed drop by drop through 10-feet of sugar maple charcoal, then matured in handcrafted barrels of our own making.",
     image:
       "https://www.thecocktaildb.com/images/ingredients/Jack%20Daniels.png",
-    accentColor: "#d97706", // Màu hổ phách
-    textColor: "#fbbf24", // Vàng sáng
+    accentColor: "#d97706",
+    textColor: "#fbbf24", 
     bgGradient: "from-[#271300] via-[#000000] to-[#000000]",
   },
   {
@@ -26,8 +24,8 @@ const SLIDES = [
     description:
       "The reference for VSOP cognac. The perfect harmony of powerful and elegant aromas.",
     image: "https://www.thecocktaildb.com/images/ingredients/Cognac.png",
-    accentColor: "#991b1b", // Đỏ rượu
-    textColor: "#fca5a5", // Hồng phấn
+    accentColor: "#991b1b",
+    textColor: "#fca5a5", 
     bgGradient: "from-[#2a0a0a] via-[#000000] to-[#000000]",
   },
   {
@@ -38,13 +36,13 @@ const SLIDES = [
     description:
       "Moët Impérial is the House's iconic champagne. Created in 1869, it embodies Moët & Chandon's unique style.",
     image: "https://www.thecocktaildb.com/images/ingredients/Champagne.png",
-    accentColor: "#059669", // Xanh lục bảo
-    textColor: "#a7f3d0", // Xanh ngọc
+    accentColor: "#059669", 
+    textColor: "#a7f3d0", 
     bgGradient: "from-[#021c10] via-[#000000] to-[#000000]",
   },
 ];
 
-// --- COMPONENT DỰ PHÒNG KHI ẢNH LỖI ---
+
 const FallbackBottle = ({ color }: { color: string }) => (
   <svg
     viewBox="0 0 100 300"
@@ -84,12 +82,10 @@ export default function HeroCarousel() {
   const [current, setCurrent] = useState(0);
   const [imgError, setImgError] = useState(false);
 
-  // Reset lỗi ảnh khi đổi slide
   useEffect(() => {
     setImgError(false);
   }, [current]);
 
-  // Auto slide 6 giây
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % SLIDES.length);
@@ -100,30 +96,26 @@ export default function HeroCarousel() {
   const activeSlide = SLIDES[current];
 
   return (
-    // NỀN GRADIENT: Thay vì bg-black, dùng gradient xám -> đen để tạo chiều sâu
-    <div className="relative w-full h-screen overflow-hidden bg-gradient-to-br from-[#1a1a1a] via-[#050505] to-black text-white">
-      {/* 1. DYNAMIC BACKGROUND LAYER (Màu nền đổi theo rượu) */}
+    <div className="relative w-full h-screen overflow-hidden bg-linear-to-br from-[#1a1a1a] via-[#050505] to-black text-white">
       <AnimatePresence mode="wait">
         <motion.div
           key={activeSlide.id}
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.6 }} // Giảm opacity để hòa trộn với nền xám
+          animate={{ opacity: 0.6 }} 
           exit={{ opacity: 0 }}
           transition={{ duration: 1.5 }}
-          className={`absolute inset-0 bg-gradient-to-br ${activeSlide.bgGradient}`}
+          className={`absolute inset-0 bg-linear-to-br ${activeSlide.bgGradient}`}
         />
       </AnimatePresence>
 
-      {/* Noise Texture: Tạo hạt phim sang trọng */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none mix-blend-overlay"></div>
 
-      {/* 2. TEXT CHÌM (BIG TYPOGRAPHY) - Sáng hơn 1 chút */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center z-0 select-none overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.h1
             key={current}
             initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 0.15 }} // Tăng nhẹ opacity để chữ nổi hơn
+            animate={{ y: 0, opacity: 0.15 }} 
             exit={{ y: -100, opacity: 0 }}
             transition={{ duration: 1, ease: "circOut" }}
             className="text-[18vw] md:text-[25vw] font-black uppercase tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-b from-white to-transparent font-serif"
@@ -133,7 +125,6 @@ export default function HeroCarousel() {
         </AnimatePresence>
       </div>
 
-      {/* 3. PARTICLES (Hạt bụi vàng bay lơ lửng) */}
       <div className="absolute inset-0 z-10 pointer-events-none">
         {[...Array(15)].map((_, i) => (
           <motion.div
@@ -154,9 +145,7 @@ export default function HeroCarousel() {
         ))}
       </div>
 
-      {/* 4. MAIN CONTENT */}
       <div className="container mx-auto px-6 h-full relative z-20 flex flex-col md:flex-row items-center justify-between">
-        {/* LEFT: TEXT CONTENT */}
         <div className="w-full md:w-1/2 pt-20 md:pt-0 flex flex-col justify-center items-start pl-4 md:pl-12">
           <AnimatePresence mode="wait">
             <motion.div
@@ -167,7 +156,7 @@ export default function HeroCarousel() {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="flex items-center gap-4 mb-6">
-                <span className="h-[1px] w-12 bg-white/50"></span>
+                <span className="h-px w-12 bg-white/50"></span>
                 <span
                   style={{ color: activeSlide.textColor }}
                   className="text-sm font-bold tracking-[0.4em] uppercase"
@@ -179,7 +168,7 @@ export default function HeroCarousel() {
               <h2 className="text-5xl md:text-8xl font-serif font-medium leading-[0.9] mb-6">
                 {activeSlide.name} <br />
                 <span
-                  className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/50 to-transparent italic font-light text-4xl md:text-6xl"
+                  className="text-transparent bg-clip-text bg-linear-to-r from-white via-white/50 to-transparent italic font-light text-4xl md:text-6xl"
                   style={{ WebkitTextStroke: "1px rgba(255,255,255,0.2)" }}
                 >
                   {activeSlide.year}
@@ -207,9 +196,7 @@ export default function HeroCarousel() {
           </AnimatePresence>
         </div>
 
-        {/* RIGHT: BOTTLE CENTERPIECE */}
         <div className="w-full md:w-1/2 h-full flex items-center justify-center relative select-none">
-          {/* Spotlight Floor (Bệ đỡ ánh sáng) */}
           <div className="absolute bottom-[20%] w-[200px] h-[30px] bg-black rounded-[100%] blur-xl opacity-60 z-10"></div>
           <motion.div
             animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }}
@@ -241,10 +228,9 @@ export default function HeroCarousel() {
                 transition: { duration: 0.4 },
               }}
             >
-              {/* LOGIC HIỂN THỊ ẢNH (Có Fallback) */}
               {!imgError ? (
                 <motion.img
-                  animate={{ y: [-10, 0, -10] }} // Hiệu ứng bay
+                  animate={{ y: [-10, 0, -10] }} 
                   transition={{
                     duration: 6,
                     repeat: Infinity,
@@ -273,7 +259,6 @@ export default function HeroCarousel() {
         </div>
       </div>
 
-      {/* 5. PROGRESS BAR */}
       <div className="absolute bottom-0 left-0 w-full h-1 bg-white/10">
         <motion.div
           key={current}
@@ -285,7 +270,6 @@ export default function HeroCarousel() {
         />
       </div>
 
-      {/* COUNTER */}
       <div className="absolute bottom-8 right-8 text-right z-30">
         <p className="text-xs font-bold text-white/50">0{current + 1} / 03</p>
         <p className="text-xs font-bold text-white uppercase tracking-widest">

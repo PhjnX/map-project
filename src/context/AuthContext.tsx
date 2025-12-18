@@ -1,4 +1,3 @@
-// src/context/AuthContext.tsx
 import {
   createContext,
   useContext,
@@ -7,7 +6,6 @@ import {
   type ReactNode,
 } from "react";
 
-// Định nghĩa kiểu dữ liệu User
 interface User {
   name: string;
   email: string;
@@ -27,7 +25,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Khi F5, kiểm tra xem trong localStorage có lưu user chưa
   useEffect(() => {
     const storedUser = localStorage.getItem("webie_user");
     if (storedUser) {
@@ -35,14 +32,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Hàm giả lập Login
   const login = async (email: string, pass: string): Promise<boolean> => {
     setIsLoading(true);
 
-    // Giả vờ đợi 1.5 giây như đang gọi API thật
     return new Promise((resolve) => {
       setTimeout(() => {
-        // KIỂM TRA MẬT KHẨU CỨNG (Hardcode)
         if (email === "webie_user@gmail.com" && pass === "123123123") {
           const fakeUser = {
             name: "Mr. Webie",
@@ -51,10 +45,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               "https://images.unsplash.com/photo-1559526323-cb2f2fe2591b?q=80&w=200&auto=format&fit=crop",
           };
           setUser(fakeUser);
-          localStorage.setItem("webie_user", JSON.stringify(fakeUser)); // Lưu vào browser
-          resolve(true); // Login thành công
+          localStorage.setItem("webie_user", JSON.stringify(fakeUser)); 
+          resolve(true); 
         } else {
-          resolve(false); // Login thất bại
+          resolve(false);
         }
         setIsLoading(false);
       }, 1500);
@@ -73,7 +67,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// Hook để dùng nhanh ở các component khác
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) throw new Error("useAuth must be used within an AuthProvider");

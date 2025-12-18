@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&display=swap");
 @import "tailwindcss";
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -14,8 +13,8 @@
 }
 
 body {
-  background-color: #f2f0e9; /* Màu kem sáng làm nền chính */
-  color: #2c3324; /* Màu chữ xanh rêu đậm */
+  background-color: #f2f0e9; 
+  color: #2c3324; 
   font-family: "DM Sans", sans-serif;
   overflow-x: hidden;
 }
@@ -27,21 +26,17 @@ body {
 }
 
 :root {
-  /* Ghi đè font-sans mặc định thành Montserrat */
   --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
 
-  /* Ghi đè font-serif mặc định thành Cinzel (dùng cho Logo, Tiêu đề) */
   --font-serif: "Cinzel", ui-serif, Georgia, Cambria, "Times New Roman", Times,
     serif;
 
-  /* Thêm màu custom nếu muốn dùng class như text-gold, bg-dark */
   --color-gold: #d4af37;
   --color-dark: #050505;
 }
 
-/* Các style global khác */
 body {
   background-color: var(--color-dark);
   color: white;
-  font-family: var(--font-sans); /* Mặc định toàn web dùng Montserrat */
+  font-family: var(--font-sans); 
 }

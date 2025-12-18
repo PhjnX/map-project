@@ -1,13 +1,8 @@
-// src/data/mockData.ts
 import type { Product, StoreLocation } from "../types";
 
-// --- 1. CÁC HÀM BỔ TRỢ ---
-
-// Hàm lấy ảnh từ TheCocktailDB (Nguồn ảnh PNG tách nền đẹp)
 const getImg = (name: string) =>
   `https://www.thecocktaildb.com/images/ingredients/${name}.png`;
 
-// Thông số kỹ thuật mặc định (Dùng cho SP chưa có data chi tiết)
 const defaultSpecs = [
   { label: "Origin", value: "Imported" },
   { label: "Region", value: "Global" },
@@ -15,18 +10,13 @@ const defaultSpecs = [
   { label: "Volume", value: "750ml" },
 ];
 
-// Ghi chú hương vị mặc định
 const defaultNotes = [
   { title: "Nose", text: "Hương thơm nồng nàn, lôi cuốn đặc trưng." },
   { title: "Palate", text: "Vị cân bằng, cấu trúc tốt và êm mượt." },
   { title: "Finish", text: "Hậu vị kéo dài, để lại ấn tượng sâu sắc." },
 ];
 
-// --- 2. DANH SÁCH SẢN PHẨM CHÍNH (MASTER LIST) ---
 export const PRODUCTS_DATA: Product[] = [
-  // ============================================================
-  // 1. FEATURED PRODUCTS (Sản phẩm nổi bật - Full thông tin)
-  // ============================================================
   {
     id: 1,
     name: "Macallan 18 Years Sherry Oak",
@@ -532,7 +522,6 @@ export const STORE_LOCATIONS: StoreLocation[] = [
     id: 1,
     name: "Webie Cellar An Phu",
     address: "57 Đường số 53, Phường An Phú, TP. Thủ Đức",
-    // Tọa độ chuẩn ngay số 57 đường 53 (theo hình bạn gửi)
     lat: 10.78411388347473,
     lng: 106.74866048347813,
     phone: "0909 123 456",
@@ -540,3 +529,4 @@ export const STORE_LOCATIONS: StoreLocation[] = [
     closeHour: 22,
   },
 ];
+// --- 1. CONFIG GIỜ MỞ CỬA ---

@@ -26,11 +26,10 @@ const MENU_ITEMS = {
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false); // State mở modal login
+  const [isLoginOpen, setIsLoginOpen] = useState(false); 
 
   const location = useLocation();
-  if (location.pathname === "/order") return null;
-  const { user, logout } = useAuth(); // Lấy data user và hàm logout
+  const { user, logout } = useAuth(); 
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -50,7 +49,6 @@ export default function Header() {
         }`}
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
-          {/* --- LOGO --- */}
           <Link
             to="/"
             className="group flex flex-col items-center justify-center select-none z-50"
@@ -68,7 +66,6 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* --- NAV --- */}
           <nav className="hidden md:flex items-center gap-10">
             <NavLink
               to="/"
@@ -96,7 +93,6 @@ export default function Header() {
               About
             </NavLink>
 
-            {/* DROPDOWN COLLECTIONS */}
             <div className="group relative py-4">
               <button
                 className={`flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.2em] transition-colors ${
@@ -177,13 +173,11 @@ export default function Header() {
             </div>
           </nav>
 
-          {/* --- ICONS & AUTH --- */}
           <div className="flex items-center gap-6 md:gap-8 text-white">
             <button className="hover:text-[#D4AF37] transition-colors">
               <FaSearch size={18} />
             </button>
 
-            {/* LOGIC ĐĂNG NHẬP Ở ĐÂY */}
             {user ? (
               // Đã đăng nhập: Hiện Avatar + Nút Logout
               <div className="flex items-center gap-3 group relative">
@@ -202,7 +196,6 @@ export default function Header() {
                 </button>
               </div>
             ) : (
-              // Chưa đăng nhập: Hiện Icon User để mở modal
               <button
                 onClick={() => setIsLoginOpen(true)}
                 className="hover:text-[#D4AF37] transition-colors"
@@ -227,7 +220,6 @@ export default function Header() {
         </div>
       </header>
 
-      {/* MODAL ĐĂNG NHẬP */}
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </>
   );

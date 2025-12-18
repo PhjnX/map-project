@@ -3,11 +3,10 @@ import { motion } from "framer-motion";
 
 export default function BrandStory() {
   return (
-    <section className="relative bg-gradient-to-b from-[#121212] to-[#050505] py-24 overflow-hidden">
+    <section className="relative bg-linear-to-b from-[#121212] to-[#050505] py-24 overflow-hidden">
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none"></div>
 
       <div className="container mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center gap-16">
-        {/* --- ẢNH (Trượt từ trái vào) --- */}
         <motion.div
           className="w-full md:w-1/2"
           initial={{ opacity: 0, x: -100 }}
@@ -25,7 +24,6 @@ export default function BrandStory() {
           </div>
         </motion.div>
 
-        {/* --- TEXT (Trượt từ phải vào) --- */}
         <motion.div
           className="w-full md:w-1/2 text-center md:text-left"
           initial={{ opacity: 0, x: 100 }}

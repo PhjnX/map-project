@@ -1,4 +1,3 @@
-// src/pages/OrderPage.tsx
 import { useState, useEffect, useMemo, useRef } from "react";
 import {
   MapContainer,
@@ -25,8 +24,7 @@ import {
   FaPhoneAlt,
   FaDirections,
   FaTimes,
-  FaCalendarAlt,
-  FaClock,
+  FaShippingFast,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +35,17 @@ import LoginModal from "../components/LoginModal";
 import { STORE_LOCATIONS } from "../data/mockData";
 import type { StoreLocation } from "../types";
 
-/* ---------------- ICONS ---------------- */
+const STORE_HOURS: Record<number, { open: number; close: number }> = {
+  0: { open: 10, close: 22 },
+  1: { open: 9, close: 21 },
+  2: { open: 9, close: 21 },
+  3: { open: 9, close: 21 },
+  4: { open: 9, close: 21 },
+  5: { open: 9, close: 22 },
+  6: { open: 9, close: 22 },
+};
+
+const DEFAULT_CENTER: LatLngExpression = [10.7721, 106.6983];
 
 const userIcon = new Icon({
   iconUrl:
@@ -61,8 +69,6 @@ const storeIcon = new Icon({
   shadowSize: [50, 50],
 });
 
-/* ---------------- HELPERS ---------------- */
-
 function calculateDistance(
   lat1: number,
   lon1: number,
@@ -82,12 +88,36 @@ function calculateDistance(
   return parseFloat((R * c).toFixed(3));
 }
 
-/* ---------------- Map helpers (v4-safe) ---------------- */
+const generateTimeSlots = (dateString: string) => {
+  if (!dateString) return [];
+  const date = new Date(dateString);
+  const dayOfWeek = date.getDay();
+  const { open, close } = STORE_HOURS[dayOfWeek] || { open: 9, close: 21 };
 
-/**
- * SetMap: child component sử dụng useMap() để truyền instance map ra ngoài.
- * Cách này tương thích react-leaflet v4 (không dùng whenCreated).
- */
+  const slots = [];
+  const now = new Date();
+  const isToday = now.toISOString().split("T")[0] === dateString;
+  const currentHour = now.getHours();
+  const currentMin = now.getMinutes();
+
+  for (let h = open; h < close; h++) {
+    for (let m = 0; m < 60; m += 30) {
+      if (isToday) {
+        if (h > currentHour + 1 || (h === currentHour + 1 && m > currentMin)) {
+          slots.push(
+            `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`
+          );
+        }
+      } else {
+        slots.push(
+          `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`
+        );
+      }
+    }
+  }
+  return slots;
+};
+
 function SetMap({ onMap }: { onMap: (map: LeafletMap) => void }) {
   const map = useMap();
   useEffect(() => {
@@ -96,9 +126,6 @@ function SetMap({ onMap }: { onMap: (map: LeafletMap) => void }) {
   return null;
 }
 
-/**
- * MapController: flyTo + invalidateSize (giữ để điều hướng center/zoom mượt)
- */
 function MapController({
   center,
   zoom,
@@ -109,23 +136,17 @@ function MapController({
   const map = useMap();
   useEffect(() => {
     try {
-      map.flyTo(center, zoom || 16, { duration: 1.2, animate: true });
-    } catch (e) {
-      /* ignore */
-    }
+      map.flyTo(center, zoom || 16, { duration: 1.5, animate: true });
+    } catch (e) {}
     const t = setTimeout(() => {
       try {
         map.invalidateSize();
-      } catch (e) {
-        /* ignore */
-      }
+      } catch (e) {}
     }, 150);
     return () => clearTimeout(t);
   }, [center, zoom, map]);
   return null;
 }
-
-/* ---------------- Modals (unchanged) ---------------- */
 
 const PickupModal = ({
   store,
@@ -137,71 +158,84 @@ const PickupModal = ({
   onConfirm: () => void;
 }) => {
   const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [selectedSlot, setSelectedSlot] = useState("");
+
+  const timeSlots = useMemo(() => generateTimeSlots(date), [date]);
 
   return (
-    <div className="absolute inset-0 z-[2000] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+    <div className="absolute inset-0 z-2000 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="bg-white rounded-xl w-full max-w-md overflow-hidden shadow-2xl relative text-black"
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="bg-white w-full max-w-md rounded-xl overflow-hidden shadow-2xl relative text-black"
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-black/40 hover:text-black transition-colors bg-gray-100 p-2 rounded-full"
+          className="absolute top-3 right-3 p-2 bg-gray-100 rounded-full hover:bg-gray-200 text-black z-10"
         >
-          <FaTimes size={14} />
+          <FaTimes />
         </button>
-        <div className="bg-[#D4AF37] p-6 text-center">
-          <h2 className="text-xl font-serif font-bold text-black uppercase tracking-widest">
-            Pickup Order
+
+        <div className="bg-[#D4AF37] p-5 text-center">
+          <h2 className="font-bold text-black uppercase tracking-widest text-lg">
+            Đặt Lịch Pickup
           </h2>
-          <p className="text-black/70 text-xs mt-1">Đặt lịch hẹn lấy rượu</p>
+          <p className="text-xs mt-1 text-black/80">{store.name}</p>
         </div>
-        <div className="p-8 pt-6">
-          <div className="mb-6 text-center">
-            <h3 className="font-bold text-lg text-black mb-1">{store.name}</h3>
-            <p className="text-gray-500 text-sm">{store.address}</p>
+
+        <div className="p-6 max-h-[70vh] overflow-y-auto">
+          <div className="mb-6">
+            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
+              1. Chọn ngày lấy hàng
+            </label>
+            <input
+              type="date"
+              min={new Date().toISOString().split("T")[0]}
+              onChange={(e) => {
+                setDate(e.target.value);
+                setSelectedSlot("");
+              }}
+              className="w-full border border-gray-200 p-3 rounded text-sm text-black bg-white focus:border-[#D4AF37] outline-none cursor-pointer"
+              style={{ colorScheme: "light" }}
+            />
           </div>
-          <div className="space-y-4 mb-8">
-            <div>
-              <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">
-                Ngày nhận
-              </label>
-              <div className="relative">
-                <input
-                  type="date"
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full border border-gray-200 rounded p-3 text-sm text-black focus:border-[#D4AF37] outline-none cursor-pointer bg-white"
-                  style={{ colorScheme: "light" }}
-                />
-                <FaCalendarAlt className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
+
+          <div className="mb-6">
+            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
+              2. Khung giờ (
+              {date ? `Thứ ${new Date(date).getDay() + 1}` : "..."})
+            </label>
+            {!date ? (
+              <p className="text-xs text-gray-400 italic">
+                Vui lòng chọn ngày trước.
+              </p>
+            ) : timeSlots.length === 0 ? (
+              <p className="text-xs text-red-500 font-bold">
+                Cửa hàng đóng cửa hoặc hết giờ phục vụ hôm nay.
+              </p>
+            ) : (
+              <div className="grid grid-cols-4 gap-2">
+                {timeSlots.map((slot) => (
+                  <button
+                    key={slot}
+                    onClick={() => setSelectedSlot(slot)}
+                    className={`py-2 text-xs font-bold rounded border transition-all ${
+                      selectedSlot === slot
+                        ? "bg-black text-[#D4AF37] border-black shadow-md"
+                        : "bg-white text-gray-600 border-gray-200 hover:border-black"
+                    }`}
+                  >
+                    {slot}
+                  </button>
+                ))}
               </div>
-            </div>
-            <div>
-              <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">
-                Giờ nhận (09:00 - 22:00)
-              </label>
-              <div className="relative">
-                <input
-                  type="time"
-                  onChange={(e) => setTime(e.target.value)}
-                  className="w-full border border-gray-200 rounded p-3 text-sm text-black focus:border-[#D4AF37] outline-none cursor-pointer bg-white"
-                  style={{ colorScheme: "light" }}
-                />
-                <FaClock className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
-              </div>
-            </div>
+            )}
           </div>
+
           <button
-            onClick={() => {
-              if (!date || !time) {
-                alert("Vui lòng chọn ngày giờ!");
-                return;
-              }
-              onConfirm();
-            }}
-            className="w-full bg-black text-[#D4AF37] py-4 rounded font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#222] transition-all shadow-lg"
+            disabled={!date || !selectedSlot}
+            onClick={onConfirm}
+            className="w-full bg-[#D4AF37] text-black py-4 font-bold uppercase tracking-[0.2em] text-xs hover:bg-black hover:text-[#D4AF37] disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded shadow-lg"
           >
             Xác Nhận Đặt Lịch
           </button>
@@ -219,7 +253,7 @@ const StoreDetailModal = ({
   onClose: () => void;
 }) => {
   return (
-    <div className="absolute inset-0 z-[2000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="absolute inset-0 z-2000 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -239,13 +273,7 @@ const StoreDetailModal = ({
           <div className="space-y-4 text-sm text-gray-600">
             <div>
               <strong className="block text-black text-xs uppercase tracking-wider mb-1">
-                Delivery Hours
-              </strong>
-              09:00 - 22:00 (Mon - Sun)
-            </div>
-            <div>
-              <strong className="block text-black text-xs uppercase tracking-wider mb-1">
-                Pickup Hours
+                Hours
               </strong>
               09:00 - 22:00 (Mon - Sun)
             </div>
@@ -274,19 +302,16 @@ const StoreDetailModal = ({
   );
 };
 
-/* ---------------- MAIN ---------------- */
-
 export default function OrderPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [showLoginModal, setShowLoginModal] = useState(false);
-
-  // delay map show (optional), bạn có thể xóa sau khi confirm map ok
   const [isMapReady, setIsMapReady] = useState(false);
 
   useEffect(() => {
     if (!user) setShowLoginModal(true);
   }, [user]);
+
   const handleCloseLogin = () => {
     setShowLoginModal(false);
     if (!user) navigate("/");
@@ -299,14 +324,12 @@ export default function OrderPage() {
 
   const THE_STORE = STORE_LOCATIONS[0];
 
-  // states
   const [viewMode, setViewMode] = useState<"order" | "locations">("order");
   const [orderTab, setOrderTab] = useState<"delivery" | "pickup">("delivery");
-  const [mapCenter, setMapCenter] = useState<LatLngExpression>([
-    THE_STORE.lat,
-    THE_STORE.lng,
-  ]);
-  const [mapZoom, setMapZoom] = useState(16);
+
+  const [mapCenter, setMapCenter] = useState<LatLngExpression>(DEFAULT_CENTER);
+  const [mapZoom, setMapZoom] = useState(13);
+
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     null
   );
@@ -320,6 +343,7 @@ export default function OrderPage() {
 
   const [showPickupModal, setShowPickupModal] = useState(false);
   const [showStoreDetail, setShowStoreDetail] = useState(false);
+
   const [modalStatus, setModalStatus] = useState<{
     show: boolean;
     type: "success" | "error" | "warning";
@@ -328,22 +352,62 @@ export default function OrderPage() {
   }>({ show: false, type: "success", title: "", message: "" });
 
   const markerRef = useRef<LeafletMarker | null>(null);
-
-  // map instance
   const [mapInstance, setMapInstance] = useState<LeafletMap | null>(null);
 
-  // Handlers
+  const showStoreMarker =
+    orderTab === "pickup" || (orderTab === "delivery" && userLocation !== null);
+
+  const handleCheckout = () => {
+    if (!deliveryInfo || !userLocation) {
+      setModalStatus({
+        show: true,
+        type: "error",
+        title: "Thiếu thông tin",
+        message: "Vui lòng chọn địa điểm giao hàng trước.",
+      });
+      return;
+    }
+
+    const shippingFee = 15000 + deliveryInfo.km * 5000;
+    const roundedFee = Math.round(shippingFee / 1000) * 1000;
+
+    setModalStatus({
+      show: true,
+      type: "success",
+      title: "Chuyển đến thanh toán",
+      message: `Phí ship: ${roundedFee.toLocaleString()}đ cho ${
+        deliveryInfo.km
+      }km`,
+    });
+  };
+
   const handleSwitchToPickup = () => {
     setOrderTab("pickup");
     setMapCenter([THE_STORE.lat, THE_STORE.lng]);
     setMapZoom(17);
     setRoutePolyline([]);
     setDeliveryInfo(null);
+    setUserLocation(null);
+    setAddressInput("");
+  };
+
+  const handleSwitchToDelivery = () => {
+    setOrderTab("delivery");
+    setMapCenter(DEFAULT_CENTER);
+    setMapZoom(13);
+    setUserLocation(null);
+    setAddressInput("");
+    setRoutePolyline([]);
   };
 
   const handleConfirmPickup = () => {
     setShowPickupModal(false);
-    alert("Đặt lịch thành công!");
+    setModalStatus({
+      show: true,
+      type: "success",
+      title: "Thành công",
+      message: "Đơn hàng Pickup đã được ghi nhận!",
+    });
   };
 
   const checkDeliveryLogic = async (lat: number, lng: number) => {
@@ -356,7 +420,7 @@ export default function OrderPage() {
         show: true,
         type: "success",
         title: "Tại Cửa Hàng",
-        message: "Bạn đang ở ngay tại Webie Cellar!",
+        message: "Bạn đang ở ngay tại Store!",
       });
       return;
     }
@@ -387,46 +451,135 @@ export default function OrderPage() {
         show: true,
         type: "error",
         title: "Quá Xa",
-        message: "Địa chỉ quá 15km.",
+        message: "Hiện tại Webie chưa hỗ trợ giao > 15km.",
       });
-    } else {
-      setModalStatus({ show: false, type: "success", title: "", message: "" });
     }
   };
 
   const handleManualSearch = async () => {
-    if (!addressInput) return;
+    // 1. Validate Input
+    if (!addressInput.trim()) return;
+
     setIsProcessing(true);
     setDeliveryInfo(null);
     setRoutePolyline([]);
+
+    const searchOSM = async (query: string) => {
+      const q = query.toLowerCase().includes("vietnam")
+        ? query
+        : `${query}, Vietnam`;
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+            q
+          )}&limit=1&addressdetails=1&countrycodes=vn`
+        );
+        return await res.json();
+      } catch {
+        return [];
+      }
+    };
+
     try {
-      const query = addressInput.toLowerCase().includes("vietnam")
-        ? addressInput
-        : `${addressInput}, Vietnam`;
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          query
-        )}&limit=1`
-      );
-      const data = await response.json();
+      let data = [];
+      let searchLevel = "exact";
+
+      const lowerInput = addressInput.toLowerCase();
+
+      let cleanInput = lowerInput
+        .replace(/\s+(phường|xã|thị trấn)\s+/g, ", ")
+        .replace(/\s+(quận|huyện|thành phố|tỉnh|tp)\s+/g, ", ");
+
+      const streetKeywords = [
+        "đường",
+        "phố",
+        "đ.",
+        "hẻm",
+        "ngõ",
+        "ngách",
+        "tỉnh lộ",
+        "quốc lộ",
+      ];
+      let streetPart = cleanInput;
+      for (const kw of streetKeywords) {
+        const idx = cleanInput.indexOf(kw);
+        if (idx !== -1) {
+          streetPart = cleanInput.substring(idx);
+          break;
+        }
+      }
+
+      console.log("Tìm Level 1 (Optimized):", streetPart);
+      data = await searchOSM(streetPart);
+      if (data.length > 0) searchLevel = "optimized";
+
+      if (!data || data.length === 0) {
+        console.log("Tìm Level 2 (Exact):", addressInput);
+        data = await searchOSM(addressInput);
+        if (data.length > 0) searchLevel = "exact";
+      }
+
+      if (!data || data.length === 0) {
+        const parts = streetPart
+          .split(",")
+          .map((p) => p.trim())
+          .filter((p) => p);
+        if (parts.length >= 2) {
+          const areaQuery = parts.slice(-2).join(", ");
+          console.log("Tìm Level 3 (Admin Area):", areaQuery);
+          data = await searchOSM(areaQuery);
+          if (data.length > 0) searchLevel = "administrative";
+        }
+      }
       if (data && data.length > 0) {
         const { lat, lon, display_name } = data[0];
-        const latitude = parseFloat(lat),
-          longitude = parseFloat(lon);
+        const latitude = parseFloat(lat);
+        const longitude = parseFloat(lon);
+
         setUserLocation([latitude, longitude]);
+
+        if (searchLevel === "administrative") {
+          setAddressInput(addressInput);
+          setModalStatus({
+            show: true,
+            type: "warning",
+            title: "Ghim tương đối",
+            message: `Không tìm thấy tên đường trong dữ liệu bản đồ. Hệ thống đã ghim tại trung tâm ${
+              display_name.split(",")[0]
+            }. Vui lòng KÉO GHIM về đúng nhà.`,
+          });
+        } else if (searchLevel === "optimized") {
+          setModalStatus({
+            show: true,
+            type: "warning",
+            title: "Tìm thấy đường",
+            message:
+              "Đã định vị được con đường. Vui lòng KÉO GHIM đỏ về đúng số nhà của bạn.",
+          });
+        } else {
+          setModalStatus({
+            show: true,
+            type: "warning",
+            title: "Kiểm tra vị trí",
+            message: "Vui lòng kiểm tra và KÉO GHIM nếu vị trí chưa chính xác.",
+          });
+        }
+
         setMapCenter([latitude, longitude]);
-        setAddressInput(display_name.split(",").slice(0, 3).join(","));
+        setMapZoom(16);
         await checkDeliveryLogic(latitude, longitude);
       } else {
         setModalStatus({
           show: true,
           type: "error",
           title: "Không tìm thấy",
-          message: "Thử nhập rõ hơn (Phường, Quận)",
+          message:
+            "Rất tiếc, không định vị được khu vực này. Hãy thử nhập tên một tòa nhà lớn hoặc giao lộ gần đó.",
         });
       }
     } catch (e) {
-      alert("Lỗi kết nối.");
+      console.error(e);
+      alert("Lỗi kết nối bản đồ.");
     }
     setIsProcessing(false);
   };
@@ -441,6 +594,7 @@ export default function OrderPage() {
         const { latitude, longitude } = pos.coords;
         setUserLocation([latitude, longitude]);
         setMapCenter([latitude, longitude]);
+        setMapZoom(18);
         setAddressInput("Vị trí của bạn (Kéo ghim để chỉnh)");
         checkDeliveryLogic(latitude, longitude);
         setIsProcessing(false);
@@ -461,28 +615,28 @@ export default function OrderPage() {
           const { lat, lng } = marker.getLatLng();
           setUserLocation([lat, lng]);
           checkDeliveryLogic(lat, lng);
-          setAddressInput(`Ghim đã chỉnh`);
+          setAddressInput(
+            `Ghim đã chỉnh (${lat.toFixed(4)}, ${lng.toFixed(4)})`
+          );
         }
       },
     }),
     []
   );
 
-  // Khi mapInstance thay đổi hoặc layout thay đổi -> invalidateSize()
   useEffect(() => {
     if (!mapInstance) return;
     const t = setTimeout(() => {
       try {
         mapInstance.invalidateSize();
-      } catch (e) {
-        /* ignore */
-      }
+      } catch (e) {}
     }, 150);
     return () => clearTimeout(t);
   }, [mapInstance, viewMode, isMapReady, orderTab, mapCenter]);
 
   return (
     <div className="flex flex-col h-screen bg-[#050505] font-sans overflow-hidden text-white selection:bg-[#D4AF37] selection:text-black">
+      {/* HEADER */}
       <header className="h-16 bg-[#0a0a0a] border-b border-[#D4AF37]/20 flex items-center px-6 justify-between z-40 relative shadow-lg shrink-0">
         <div className="flex items-center gap-4">
           <button
@@ -534,6 +688,7 @@ export default function OrderPage() {
             setViewMode("locations");
             setShowStoreDetail(true);
             setMapCenter([THE_STORE.lat, THE_STORE.lng]);
+            setMapZoom(16);
           }}
           className={`px-8 h-full text-[10px] font-bold uppercase tracking-[0.2em] transition-all relative ${
             viewMode === "locations"
@@ -558,9 +713,10 @@ export default function OrderPage() {
           }`}
         >
           <div className="p-8 h-full flex flex-col overflow-y-auto">
+            {/* Delivery / Pickup Switch */}
             <div className="bg-black/40 p-1 rounded border border-white/10 flex mb-6 shrink-0">
               <button
-                onClick={() => setOrderTab("delivery")}
+                onClick={handleSwitchToDelivery}
                 className={`flex-1 py-3 rounded text-[9px] font-bold uppercase tracking-widest transition-all ${
                   orderTab === "delivery"
                     ? "bg-[#D4AF37] text-black shadow-lg"
@@ -600,8 +756,9 @@ export default function OrderPage() {
                       <div className="absolute right-3 top-3.5 w-4 h-4 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin"></div>
                     )}
                   </div>
-                  <p className="text-[10px] text-white/30 italic">
-                    Kéo thả ghim để chọn vị trí chính xác nhất.
+                  <p className="text-[10px] text-[#D4AF37] italic mt-1 animate-pulse">
+                    * Lưu ý: Hãy kéo thả ghim đỏ trên bản đồ để chốt vị trí
+                    chính xác nhất.
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -615,24 +772,47 @@ export default function OrderPage() {
                   <button
                     onClick={handleUseCurrentLocation}
                     className="px-4 bg-[#D4AF37] text-black rounded hover:bg-white transition"
+                    title="Dùng vị trí hiện tại"
                   >
                     <FaLocationArrow />
                   </button>
                 </div>
                 {deliveryInfo && (
-                  <div className="mt-4 p-4 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-lg">
+                  <div className="mt-4 p-4 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-lg animate-fadeIn">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-[#D4AF37] font-bold text-xs uppercase flex items-center gap-2">
-                        <FaCheckCircle /> Route Found
-                      </span>
-                      <span className="text-[10px] text-white/50">
-                        {deliveryInfo.km === 0
-                          ? "Tại Store"
-                          : `${deliveryInfo.km}km • ${deliveryInfo.minutes} mins`}
-                      </span>
+                      <div>
+                        <span className="text-[#D4AF37] font-bold text-xs uppercase flex items-center gap-2">
+                          <FaCheckCircle /> Route Found
+                        </span>
+                        <span className="text-white font-bold text-lg mt-1 block">
+                          ~
+                          {Math.round(
+                            15000 + deliveryInfo.km * 5000
+                          ).toLocaleString()}
+                          đ
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] text-white/50 block">
+                          Distance
+                        </span>
+                        <span className="text-sm font-bold">
+                          {deliveryInfo.km} km
+                        </span>
+                        <span className="text-[10px] text-white/50 block mt-1">
+                          Time
+                        </span>
+                        <span className="text-sm font-bold">
+                          {deliveryInfo.minutes} mins
+                        </span>
+                      </div>
                     </div>
-                    <button className="w-full bg-[#D4AF37] text-black font-bold uppercase tracking-[0.2em] py-4 text-[10px] hover:bg-white transition-colors">
-                      Tiến hành thanh toán
+
+                    <button
+                      onClick={handleCheckout}
+                      className="w-full bg-[#D4AF37] text-black font-bold uppercase tracking-[0.2em] py-4 text-[10px] hover:bg-white hover:scale-[1.02] active:scale-95 transition-all shadow-lg rounded flex items-center justify-center gap-2"
+                    >
+                      <FaShippingFast size={14} /> Tiến hành thanh toán
                     </button>
                   </div>
                 )}
@@ -640,7 +820,7 @@ export default function OrderPage() {
             )}
 
             {orderTab === "pickup" && (
-              <div className="flex-1 space-y-4">
+              <div className="flex-1 space-y-4 animate-fadeIn">
                 <div className="p-4 border border-[#D4AF37] bg-[#D4AF37]/5 rounded-lg relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-2 bg-[#D4AF37] text-black text-[9px] font-bold uppercase tracking-widest">
                     Main Store
@@ -671,9 +851,7 @@ export default function OrderPage() {
               zoomControl={false}
               className="h-full w-full"
             >
-              {/* SetMap inject instance lên state bằng useMap() */}
               <SetMap onMap={(m) => setMapInstance(m)} />
-
               <TileLayer
                 url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
                 attribution="Google Maps"
@@ -681,7 +859,7 @@ export default function OrderPage() {
               <ZoomControl position="bottomright" />
               <MapController center={mapCenter} zoom={mapZoom} />
 
-              {routePolyline.length > 0 && (
+              {routePolyline.length > 0 && orderTab === "delivery" && (
                 <Polyline
                   positions={routePolyline}
                   pathOptions={{ color: "#D4AF37", weight: 6, opacity: 0.9 }}
@@ -699,24 +877,36 @@ export default function OrderPage() {
                 >
                   <Popup>
                     <span className="text-black font-bold text-xs">
-                      Vị trí của bạn
+                      Giao hàng tại đây <br /> (Kéo ghim để chỉnh)
                     </span>
                   </Popup>
                 </Marker>
               )}
 
-              <Marker
-                position={[THE_STORE.lat, THE_STORE.lng]}
-                icon={storeIcon}
-                eventHandlers={{
-                  click: () => {
-                    if (viewMode === "order" && orderTab === "pickup")
-                      setShowPickupModal(true);
-                    else setShowStoreDetail(true);
-                  },
-                }}
-                zIndexOffset={0}
-              />
+              {showStoreMarker && (
+                <Marker
+                  position={[THE_STORE.lat, THE_STORE.lng]}
+                  icon={storeIcon}
+                  eventHandlers={{
+                    click: () => {
+                      if (orderTab === "pickup") setShowPickupModal(true);
+                      else setShowStoreDetail(true);
+                    },
+                  }}
+                  zIndexOffset={0}
+                >
+                  {orderTab === "pickup" && (
+                    <Popup autoClose={false} closeOnClick={false}>
+                      <div className="text-center">
+                        <span className="font-bold text-black block">
+                          {THE_STORE.name}
+                        </span>
+                        <span className="text-[9px]">Điểm nhận hàng</span>
+                      </div>
+                    </Popup>
+                  )}
+                </Marker>
+              )}
             </MapContainer>
           ) : (
             <div className="h-full w-full flex items-center justify-center bg-[#050505]">
@@ -730,12 +920,14 @@ export default function OrderPage() {
           )}
 
           <AnimatePresence>
-            {modalStatus.show && modalStatus.type !== "success" && (
+            {modalStatus.show && (
               <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white text-black px-6 py-4 rounded shadow-xl z-[1000] flex items-center gap-4 border-l-4 border-yellow-500 max-w-md">
                 {modalStatus.type === "error" ? (
                   <FaTimesCircle className="text-red-500 text-xl" />
-                ) : (
+                ) : modalStatus.type === "warning" ? (
                   <FaExclamationCircle className="text-yellow-500 text-xl" />
+                ) : (
+                  <FaCheckCircle className="text-green-500 text-xl" />
                 )}
                 <div>
                   <h4 className="font-bold text-sm uppercase">

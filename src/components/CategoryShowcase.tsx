@@ -1,4 +1,3 @@
-// src/components/CategoryShowcase.tsx
 import { motion } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa";
 import RedWine from "../assets/images/redwine.png";
@@ -11,30 +10,27 @@ const CATEGORIES = [
     title: "Red Wines",
     subtitle: "Bordeaux & Burgundy",
     image: RedWine,
-    glow: "bg-red-500/20", // Sáng hơn
+    glow: "bg-red-500/20", 
   },
   {
     id: 2,
     title: "Premium Whiskey",
     subtitle: "Single Malt Scotch",
     image: Whiskey,
-    glow: "bg-amber-500/20", // Sáng hơn
+    glow: "bg-amber-500/20", 
   },
   {
     id: 3,
     title: "Fine Champagne",
     subtitle: "Sparkling Excellence",
     image: Champagne,
-    glow: "bg-yellow-200/20", // Sáng hơn
+    glow: "bg-yellow-200/20", 
   },
 ];
 
 export default function CategoryShowcase() {
   return (
-    // THAY ĐỔI: Nền section dùng màu Xám Đậm (#080808) thay vì đen đặc
-    // Thêm ambient light (đốm sáng) ở nền
     <section className="bg-[#080808] py-24 border-b border-white/5 relative overflow-hidden">
-      {/* Ambient Light Background */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#D4AF37]/5 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-900/5 rounded-full blur-[120px] pointer-events-none"></div>
 
@@ -64,10 +60,8 @@ export default function CategoryShowcase() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.2 }}
-              // THAY ĐỔI: Card dùng nền Glass (bg-white/5) thay vì bg-black
-              className="group relative h-[550px] bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-[#D4AF37]/50 hover:bg-white/[0.05] transition-all duration-500"
+              className="group relative h-[550px] bg-white/3 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-[#D4AF37]/50 hover:bg-white/[0.05] transition-all duration-500"
             >
-              {/* Glow sáng hơn */}
               <div
                 className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-[60px] opacity-30 group-hover:opacity-60 transition-opacity duration-700 ${cat.glow}`}
               ></div>
@@ -80,8 +74,7 @@ export default function CategoryShowcase() {
                 />
               </div>
 
-              {/* Phần nền text dưới chân cũng làm sáng hơn chút */}
-              <div className="absolute bottom-0 left-0 w-full p-8 z-20 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent pt-20">
+              <div className="absolute bottom-0 left-0 w-full p-8 z-20 bg-linear-to-t from-[#050505] via-[#050505]/80 to-transparent pt-20">
                 <span className="text-[#D4AF37] text-[10px] font-bold uppercase tracking-widest mb-2 block opacity-80 group-hover:opacity-100 transition-opacity duration-300">
                   {cat.subtitle}
                 </span>
@@ -99,7 +92,6 @@ export default function CategoryShowcase() {
           ))}
         </div>
 
-        {/* View All Button */}
       </div>
     </section>
   );

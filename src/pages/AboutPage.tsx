@@ -1,9 +1,7 @@
-// src/pages/AboutPage.tsx
 import { motion, type Variants } from "framer-motion";
-import { FaWineGlassAlt, FaAward, FaUsers, FaGlobe } from "react-icons/fa"; // Đã bỏ FaChevronDown
+import { FaWineGlassAlt, FaAward, FaUsers, FaGlobe } from "react-icons/fa";
 import Bee from "../assets/images/bee.jpg";
 
-// --- DATA ---
 const IMAGES = {
   hero: "https://www.boroli.it/wp-content/uploads/2024/09/colori_bottiglie_vino.webp",
   story:
@@ -39,8 +37,6 @@ const VALUES = [
     img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=800&auto=format&fit=crop",
   },
 ];
-
-// --- ANIMATION VARIANTS ---
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 60 },
   visible: {
@@ -85,7 +81,6 @@ export default function AboutPage() {
         }
       `}</style>
 
-      {/* 1. HERO SECTION */}
       <div className="relative h-screen flex flex-col justify-center items-center overflow-hidden">
         <div className="absolute inset-0">
           <motion.div
@@ -99,17 +94,16 @@ export default function AboutPage() {
               className="w-full h-full object-cover opacity-40"
             />
           </motion.div>
-          {/* Gradient Layering */}
           <div className="absolute inset-0 bg-black/40"></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-[#050505] z-10"></div>
-          <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent z-10"></div>
+          <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-[#050505] z-10"></div>
+          <div className="absolute bottom-0 left-0 w-full h-40 bg-linear-to-t from-[#050505] via-[#050505]/80 to-transparent z-10"></div>
         </div>
 
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
-          className="relative z-20 text-center px-4 max-w-4xl pb-20" // Thêm pb-20 để đẩy chữ lên cao một chút, nhường chỗ cho ảnh ở dưới trồi lên
+          className="relative z-20 text-center px-4 max-w-4xl pb-20" 
         >
           <motion.p
             variants={fadeInUp}
@@ -124,7 +118,7 @@ export default function AboutPage() {
             Our Heritage
           </motion.h1>
           <motion.div variants={fadeInUp}>
-            <div className="w-16 h-[2px] bg-gold mx-auto mb-8 opacity-80"></div>
+            <div className="w-16 h-0.5 bg-gold mx-auto mb-8 opacity-80"></div>
           </motion.div>
           <motion.p
             variants={fadeInUp}
@@ -134,14 +128,10 @@ export default function AboutPage() {
           </motion.p>
         </motion.div>
 
-        {/* ĐÃ XÓA PHẦN SCROLL INDICATOR Ở ĐÂY */}
       </div>
 
-      {/* 2. STORY SECTION */}
       <section className="relative z-20 -mt-24 md:-mt-32 container mx-auto px-6 pb-24">
-        {/* Tăng negative margin lên -mt-32 ở màn hình lớn để ảnh trồi lên cao hơn, che lấp khoảng trống */}
         <div className="flex flex-col lg:flex-row items-center gap-16">
-          {/* Cột ảnh */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -150,7 +140,7 @@ export default function AboutPage() {
             className="w-full lg:w-1/2"
           >
             <div className="bg-[#050505] p-2 border border-white/10 shadow-2xl shadow-black/80">
-              <div className="relative overflow-hidden aspect-[4/5] border border-white/5">
+              <div className="relative overflow-hidden aspect-4/5 border border-white/5">
                 <img
                   src={IMAGES.story}
                   alt="Our Story"
@@ -161,7 +151,6 @@ export default function AboutPage() {
             </div>
           </motion.div>
 
-          {/* Cột chữ */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -171,7 +160,7 @@ export default function AboutPage() {
           >
             <motion.div
               variants={fadeInUp}
-              className="w-12 h-[2px] bg-gold mb-6"
+              className="w-12 h-0.5 bg-gold mb-6"
             ></motion.div>
             <motion.span
               variants={fadeInUp}
@@ -229,7 +218,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 3. STATS */}
       <section className="py-24 border-y border-white/5 bg-[#080808]">
         <div className="container mx-auto px-6">
           <motion.div
@@ -257,7 +245,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 4. VALUES */}
       <section className="container mx-auto px-6 py-32">
         <motion.div
           initial="hidden"
@@ -272,7 +259,7 @@ export default function AboutPage() {
           <h2 className="text-4xl md:text-5xl text-white uppercase tracking-wider">
             Core Values
           </h2>
-          <div className="w-24 h-[1px] bg-white/10 mx-auto mt-6"></div>
+          <div className="w-24 h-px bg-white/10 mx-auto mt-6"></div>
         </motion.div>
 
         <motion.div
@@ -316,7 +303,6 @@ export default function AboutPage() {
         </motion.div>
       </section>
 
-      {/* 5. CTA */}
       <section className="pb-24 container mx-auto px-6">
         <motion.div
           initial="hidden"
@@ -334,7 +320,7 @@ export default function AboutPage() {
               className="w-full h-full object-cover grayscale"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-[#080808]"></div>
+          <div className="absolute inset-0 bg-linear-to-t from-[#080808] via-transparent to-[#080808]"></div>
 
           <div className="relative z-10 max-w-3xl mx-auto">
             <span className="text-gold text-[10px] font-bold px-3 py-1 border border-gold uppercase tracking-widest mb-8 inline-block">

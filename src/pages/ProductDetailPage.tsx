@@ -1,4 +1,3 @@
-// src/pages/ProductDetailPage.tsx
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,14 +18,11 @@ import {
   FaShareAlt,
 } from "react-icons/fa";
 
-// 1. IMPORT DATA & TYPES
 import { PRODUCTS_DATA } from "../data/mockData";
 
-// 2. IMPORT AUTH & MODAL (QUAN TRỌNG)
 import { useAuth } from "../context/AuthContext";
 import LoginModal from "../components/LoginModal";
 
-// --- CẤU HÌNH CÁC GÓC ZOOM ---
 const VIEW_ANGLES = [
   { id: "full", label: "Full Body", scale: 1, x: "center", y: "center" },
   { id: "neck", label: "The Neck", scale: 2.5, x: "center", y: "top" },
@@ -38,52 +34,42 @@ export default function ProductDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // --- AUTH LOGIC ---
-  const { user } = useAuth(); // Lấy thông tin user
-  const [showLoginModal, setShowLoginModal] = useState(false); // State bật tắt modal
-  const [pendingOrder, setPendingOrder] = useState(false); // Đánh dấu là người dùng đang muốn order
-  // ------------------
+  const { user } = useAuth(); 
+  const [showLoginModal, setShowLoginModal] = useState(false); 
+  const [pendingOrder, setPendingOrder] = useState(false); 
 
   const [quantity, setQuantity] = useState(1);
   const [view, setView] = useState(VIEW_ANGLES[0]);
 
   const product = PRODUCTS_DATA.find((p) => p.id === Number(id));
 
-  // Reset khi đổi sản phẩm
   useEffect(() => {
     window.scrollTo(0, 0);
     setView(VIEW_ANGLES[0]);
   }, [id]);
 
-  // --- EFFECT TỰ ĐỘNG CHUYỂN TRANG KHI ĐĂNG NHẬP THÀNH CÔNG ---
   useEffect(() => {
-    // Nếu user đã đăng nhập VÀ đang có ý định order (pendingOrder = true)
     if (user && pendingOrder) {
-      navigate("/order"); // Bay qua trang order
-      setPendingOrder(false); // Reset trạng thái
+      navigate("/order"); 
+      setPendingOrder(false); 
     }
   }, [user, pendingOrder, navigate]);
-  // ------------------------------------------------------------
 
   // Handle Order Click
   const handleOrderClick = () => {
     if (user) {
-      // Nếu đã đăng nhập -> Qua trang order luôn
       navigate("/order");
     } else {
-      // Nếu chưa -> Bật cờ "đang chờ order" và mở modal
       setPendingOrder(true);
       setShowLoginModal(true);
     }
   };
 
-  // Handle Close Modal (Nếu tắt mà ko đăng nhập thì bỏ cờ pending)
   const handleCloseModal = () => {
     setShowLoginModal(false);
     if (!user) setPendingOrder(false);
   };
 
-  // ... (Phần code xử lý dữ liệu sản phẩm giữ nguyên)
   if (!product) {
     return (
       <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center text-white">
@@ -128,8 +114,7 @@ export default function ProductDetailPage() {
 
   return (
     <div className="bg-[#050505] min-h-screen text-white font-sans selection:bg-[#D4AF37] selection:text-black overflow-x-hidden">
-      {/* HEADER BACKGROUND */}
-      <div className="fixed top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/80 to-transparent z-40 pointer-events-none"></div>
+      <div className="fixed top-0 left-0 right-0 h-20 bg-linear-to-b from-black/80 to-transparent z-40 pointer-events-none"></div>
 
       <main className="pt-32 pb-24">
         <div className="container mx-auto px-6">
@@ -166,7 +151,6 @@ export default function ProductDetailPage() {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-12 xl:gap-24">
-            {/* --- LEFT COLUMN: VISUAL --- */}
             <div className="w-full lg:w-1/2 flex flex-col gap-6 sticky top-32 self-start">
               <div className="relative h-[450px] md:h-[600px] w-full bg-[#0a0a0a] border border-white/5 rounded-sm overflow-hidden group">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-[#D4AF37]/5 rounded-full blur-[100px] group-hover:bg-[#D4AF37]/10 transition-colors duration-1000"></div>
@@ -241,7 +225,6 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            {/* --- RIGHT COLUMN: DETAILS --- */}
             <div className="w-full lg:w-1/2 flex flex-col">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -307,7 +290,7 @@ export default function ProductDetailPage() {
               </div>
 
               <div className="mb-12 bg-[#0F0F0F] p-8 rounded-sm border border-white/5 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#D4AF37]/10 to-transparent pointer-events-none"></div>
+                <div className="absolute top-0 right-0 w-20 h-20 bg-linear-to-bl from-[#D4AF37]/10 to-transparent pointer-events-none"></div>
                 <h3 className="font-serif text-xl mb-6 text-white border-l-2 border-[#D4AF37] pl-4">
                   Tasting Notes
                 </h3>
@@ -336,7 +319,6 @@ export default function ProductDetailPage() {
                 </div>
               </div>
 
-              {/* --- ACTION BUTTONS --- */}
               <div className="mt-auto bg-[#111] p-1.5 rounded-lg border border-white/10 flex flex-col md:flex-row gap-2">
                 <div className="flex items-center justify-between bg-black rounded px-4 py-3 md:w-32 border border-white/5">
                   <button
@@ -360,7 +342,6 @@ export default function ProductDetailPage() {
                   <FaShoppingCart size={12} /> Add to Cart
                 </button>
 
-                {/* NÚT ORDER NOW VỚI LOGIC CHECK LOGIN */}
                 <button
                   onClick={handleOrderClick}
                   className="flex-[1.5] bg-[#D4AF37] hover:bg-white text-[#050505] font-bold uppercase tracking-widest text-[10px] py-4 rounded shadow-[0_0_20px_rgba(212,175,55,0.2)] transition-all flex items-center justify-center gap-2"
@@ -373,7 +354,6 @@ export default function ProductDetailPage() {
         </div>
       </main>
 
-      {/* --- LOGIN MODAL (Hiện lên nếu chưa đăng nhập mà bấm Order) --- */}
       <LoginModal isOpen={showLoginModal} onClose={handleCloseModal} />
     </div>
   );

@@ -15,7 +15,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { PRODUCTS_DATA } from "../data/mockData";
 
-// Cấu hình các bộ lọc
 const CATEGORIES = [
   { id: "all", label: "All Spirits" },
   { id: "whiskey", label: "Whiskey" },
@@ -32,34 +31,28 @@ const ITEMS_PER_PAGE = 12;
 export default function ShopPage() {
   const navigate = useNavigate();
 
-  // --- STATE QUẢN LÝ BỘ LỌC ---
   const [filterCategory, setFilterCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [priceRange, setPriceRange] = useState(100000000); // Mặc định max
-  const [sortOption, setSortOption] = useState("default"); // default | price-asc | price-desc
+  const [priceRange, setPriceRange] = useState(100000000); 
+  const [sortOption, setSortOption] = useState("default"); 
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobileFilterOpen, setMobileFilterOpen] = useState(false);
 
-  // --- LOGIC LỌC SẢN PHẨM ---
   const filteredProducts = useMemo(() => {
     let data = PRODUCTS_DATA;
 
-    // 1. Lọc theo Category
     if (filterCategory !== "all") {
       data = data.filter((p) => p.category === filterCategory);
     }
 
-    // 2. Lọc theo Search
     if (searchQuery) {
       data = data.filter((p) =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
-    // 3. Lọc theo Giá
     data = data.filter((p) => p.price <= priceRange);
 
-    // 4. Sắp xếp
     if (sortOption === "price-asc") {
       data = [...data].sort((a, b) => a.price - b.price);
     } else if (sortOption === "price-desc") {
@@ -69,19 +62,16 @@ export default function ShopPage() {
     return data;
   }, [filterCategory, searchQuery, priceRange, sortOption]);
 
-  // --- LOGIC PHÂN TRANG ---
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
   const currentProducts = filteredProducts.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
 
-  // Reset trang về 1 khi đổi bộ lọc
   useEffect(() => {
     setCurrentPage(1);
   }, [filterCategory, searchQuery, priceRange, sortOption]);
 
-  // Scroll lên đầu khi đổi trang
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
@@ -90,8 +80,7 @@ export default function ShopPage() {
     <div className="bg-[#050505] min-h-screen text-white font-sans selection:bg-[#D4AF37] selection:text-black">
       <Header />
 
-      {/* HERO HEADER NHỎ */}
-      <div className="relative pt-32 pb-12 bg-gradient-to-b from-[#111] to-[#050505] border-b border-white/5">
+      <div className="relative pt-32 pb-12 bg-linear-to-b from-[#111] to-[#050505] border-b border-white/5">
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-serif text-white mb-2">
             The Cellar Collection
@@ -103,14 +92,12 @@ export default function ShopPage() {
       </div>
 
       <div className="container mx-auto px-6 py-12 flex flex-col lg:flex-row gap-12">
-        {/* --- SIDEBAR FILTERS (Desktop) --- */}
         <aside
           className={`lg:w-1/4 lg:block ${
             isMobileFilterOpen ? "block" : "hidden"
           }`}
         >
           <div className="sticky top-24 space-y-10">
-            {/* SEARCH */}
             <div>
               <h3 className="text-[#D4AF37] font-bold uppercase tracking-widest text-xs mb-4">
                 Search
@@ -150,7 +137,6 @@ export default function ShopPage() {
               </div>
             </div>
 
-            {/* PRICE RANGE */}
             <div>
               <h3 className="text-[#D4AF37] font-bold uppercase tracking-widest text-xs mb-4">
                 Max Price
@@ -174,7 +160,6 @@ export default function ShopPage() {
           </div>
         </aside>
 
-        {/* --- MAIN CONTENT --- */}
         <main className="lg:w-3/4">
           {/* TOOLBAR */}
           <div className="flex flex-wrap justify-between items-center mb-8 gap-4 bg-[#0a0a0a] p-4 rounded-xl border border-white/5">
@@ -187,7 +172,6 @@ export default function ShopPage() {
             </p>
 
             <div className="flex items-center gap-4">
-              {/* Mobile Filter Toggle */}
               <button
                 className="lg:hidden flex items-center gap-2 text-xs font-bold uppercase hover:text-[#D4AF37]"
                 onClick={() => setMobileFilterOpen(!isMobileFilterOpen)}
@@ -195,7 +179,6 @@ export default function ShopPage() {
                 <FaFilter /> Filter
               </button>
 
-              {/* Sort Dropdown */}
               <div className="flex items-center gap-2 border-l border-white/10 pl-4">
                 <span className="text-xs text-white/40 uppercase hidden sm:inline">
                   Sort by:
@@ -222,7 +205,6 @@ export default function ShopPage() {
             </div>
           </div>
 
-          {/* PRODUCT GRID */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 min-h-[500px]">
             <AnimatePresence mode="popLayout">
               {currentProducts.length > 0 ? (
@@ -238,7 +220,6 @@ export default function ShopPage() {
                     onClick={() => navigate(`/product/${item.id}`)}
                   >
                     <div className="relative bg-[#0a0a0a] border border-white/10 h-[360px] rounded-sm overflow-hidden hover:border-[#D4AF37] transition-all duration-300">
-                      {/* Glow */}
                       <div className="absolute inset-0 flex items-center justify-center p-6">
                         <div className="absolute w-32 h-32 bg-[#D4AF37]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
                         <img
@@ -252,7 +233,6 @@ export default function ShopPage() {
                         />
                       </div>
 
-                      {/* Button */}
                       <div className="absolute bottom-0 left-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                         <button className="w-full bg-[#D4AF37] text-black font-bold uppercase text-[10px] py-4 hover:bg-white transition-colors flex items-center justify-center gap-2 tracking-widest">
                           <FaCartPlus /> Add to Cart
