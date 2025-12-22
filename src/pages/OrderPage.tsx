@@ -45,7 +45,7 @@ const STORE_HOURS: Record<number, { open: number; close: number }> = {
   6: { open: 9, close: 22 },
 };
 
-const DEFAULT_CENTER: LatLngExpression = [10.7721, 106.6983];
+const DEFAULT_CENTER: LatLngExpression = [56.1304, -106.3468];
 
 const userIcon = new Icon({
   iconUrl:
@@ -136,8 +136,8 @@ function MapController({
   const map = useMap();
   useEffect(() => {
     try {
-      map.flyTo(center, zoom || 16, { duration: 1.5, animate: true });
-    } catch (e) {}
+      map.flyTo(center, zoom || 13, { duration: 1.5, animate: true });
+    } catch (e) {} // Adjusted zoom for Canada view
     const t = setTimeout(() => {
       try {
         map.invalidateSize();
@@ -162,7 +162,7 @@ const PickupModal = ({
   const timeSlots = useMemo(() => generateTimeSlots(date), [date]);
 
   return (
-    <div className="absolute inset-0 z-[2000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div className="absolute inset-0 z-2000 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -302,6 +302,7 @@ const StoreDetailModal = ({
   );
 };
 
+// --- MAIN PAGE ---
 export default function OrderPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -325,7 +326,8 @@ export default function OrderPage() {
   const [viewMode, setViewMode] = useState<"order" | "locations">("order");
   const [orderTab, setOrderTab] = useState<"delivery" | "pickup">("delivery");
   const [mapCenter, setMapCenter] = useState<LatLngExpression>(DEFAULT_CENTER);
-  const [mapZoom, setMapZoom] = useState(13);
+  const [mapZoom, setMapZoom] = useState(4); // Default zoom for country level (Canada)
+
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     null
   );
@@ -386,7 +388,7 @@ export default function OrderPage() {
   const handleSwitchToDelivery = () => {
     setOrderTab("delivery");
     setMapCenter(DEFAULT_CENTER);
-    setMapZoom(13);
+    setMapZoom(4); // Reset zoom to Canada view
     setUserLocation(null);
     setAddressInput("");
     setRoutePolyline([]);
@@ -452,6 +454,7 @@ export default function OrderPage() {
     setRoutePolyline([]);
 
     const searchOSM = async (query: string) => {
+      // Logic thêm Vietnam/Canada tùy bạn chọn
       const q = query.toLowerCase().includes("vietnam")
         ? query
         : `${query}, Vietnam`;
@@ -459,7 +462,7 @@ export default function OrderPage() {
         const res = await fetch(
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
             q
-          )}&limit=1&addressdetails=1&countrycodes=vn`
+          )}&limit=1&addressdetails=1`
         );
         return await res.json();
       } catch {
@@ -469,7 +472,9 @@ export default function OrderPage() {
 
     try {
       let data = [];
+
       let searchLevel = "exact";
+
       const lowerInput = addressInput.toLowerCase();
       let cleanInput = lowerInput
         .replace(/\s+(phường|xã|thị trấn)\s+/g, ", ")
@@ -495,10 +500,12 @@ export default function OrderPage() {
 
       data = await searchOSM(streetPart);
       if (data.length > 0) searchLevel = "optimized";
+
       if (!data || data.length === 0) {
         data = await searchOSM(addressInput);
         if (data.length > 0) searchLevel = "exact";
       }
+
       if (!data || data.length === 0) {
         const parts = streetPart
           .split(",")
@@ -522,27 +529,30 @@ export default function OrderPage() {
           setModalStatus({
             show: true,
             type: "warning",
-            title: "Approximate Location",
-            message: `Street name not found. Pinned to center of ${
+            title: "Vị trí tương đối",
+            message: `Không tìm thấy số nhà chính xác. Đã ghim tại trung tâm ${
               display_name.split(",")[0]
-            }. Please DRAG PIN to your exact house.`,
+            }. Vui lòng KÉO GHIM về đúng nhà.`,
           });
         } else if (searchLevel === "optimized") {
           setModalStatus({
             show: true,
             type: "warning",
-            title: "Street Found",
+            title: "Tìm thấy đường",
             message:
-              "Street located. Please DRAG RED PIN to your exact number.",
+              "Đã tìm thấy con đường. Vui lòng KÉO GHIM ĐỎ về đúng số nhà của bạn.",
           });
         } else {
           setModalStatus({
             show: true,
             type: "warning",
-            title: "Check Location",
-            message: "Please check and DRAG PIN if inaccurate.",
+            title: "Kiểm tra vị trí",
+            message:
+              "Đã ghim vị trí. Vui lòng kiểm tra và kéo ghim nếu chưa chính xác.",
           });
         }
+        // ---------------------------------------------------------
+
         setMapCenter([latitude, longitude]);
         setMapZoom(16);
         await checkDeliveryLogic(latitude, longitude);
@@ -550,13 +560,13 @@ export default function OrderPage() {
         setModalStatus({
           show: true,
           type: "error",
-          title: "Not Found",
-          message: "Sorry, location not found. Try a major landmark nearby.",
+          title: "Không tìm thấy",
+          message: "Rất tiếc, không tìm thấy địa chỉ này.",
         });
       }
     } catch (e) {
       console.error(e);
-      alert("Map connection error.");
+      alert("Lỗi kết nối bản đồ.");
     }
     setIsProcessing(false);
   };
@@ -672,7 +682,7 @@ export default function OrderPage() {
               : "text-white/30 hover:text-white"
           }`}
         >
-          Coastal Spirits Locations
+          Webie Locations
           {viewMode === "locations" && (
             <motion.div
               layoutId="tab-indicator"
@@ -683,7 +693,6 @@ export default function OrderPage() {
       </div>
 
       <div className="flex flex-1 md:flex-row h-full relative overflow-hidden">
-        {/* SIDEBAR */}
         <div
           className={`absolute top-0 left-0 bottom-0 w-full md:w-[400px] bg-[#0F0F0F] z-20 shadow-[10px_0_30px_rgba(0,0,0,0.5)] flex flex-col border-r border-[#D4AF37]/10 transition-transform duration-300 ${
             viewMode === "order" ? "translate-x-0" : "-translate-x-full"

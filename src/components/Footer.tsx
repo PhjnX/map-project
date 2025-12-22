@@ -166,7 +166,7 @@ export default function Footer() {
                 href="mailto:support@webie.vn"
                 className="hover:text-[#D4AF37] transition-colors underline decoration-white/20 underline-offset-4"
               >
-                support@coastalspirits.vn
+                support@coastalspirits.ca
               </a>
             </div>
           </div>

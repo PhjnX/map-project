@@ -529,10 +529,10 @@ export const PRODUCTS_DATA: Product[] = [
 export const STORE_LOCATIONS: StoreLocation[] = [
   {
     id: 1,
-    name: "Costal Spirits Downtown",
-    address: "57 Đường số 53, Phường An Phú, TP. Thủ Đức",
-    lat: 10.78411388347473,
-    lng: 106.74866048347813,
+    name: "Costal Spirits & Wine",
+    address: "2414 St Johns St, Port Moody, BC V3H 2A9, Canada",
+    lat: 49.27895553928297,
+    lng: -122.85765829626841,
     phone: "0909 123 456",
     openHour: 9,
     closeHour: 22,
