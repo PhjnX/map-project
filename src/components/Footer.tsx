@@ -32,9 +32,9 @@ export default function Footer() {
 
           <div className="hidden md:block text-right">
             <h2 className="font-serif text-5xl font-black text-white/10 tracking-widest uppercase select-none">
-              Webie
+              Coastal
               <br />
-              Cellars
+              Spirits
             </h2>
           </div>
         </div>
@@ -156,8 +156,9 @@ export default function Footer() {
             </h4>
             <div className="space-y-4 text-sm font-light">
               <p>
-                68 Nguyen Hue, District 1<br />
-                Ho Chi Minh City, Vietnam
+                2414 St Johns St, Port Moody,
+                <br />
+                BC V3H 2A9, Canada
               </p>
               <p className="text-[#D4AF37] font-bold text-lg font-serif">
                 0909 123 456
