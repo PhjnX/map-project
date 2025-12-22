@@ -43,9 +43,10 @@ export default function BrandStory() {
           </h2>
 
           <p className="text-white/70 text-sm leading-relaxed mb-10 font-light">
-            Tại Webie Wine, chúng tôi không chỉ bán rượu, chúng tôi kể những câu
-            chuyện. Mỗi chai rượu là một kiệt tác được tuyển chọn từ những hầm
-            rượu lâu đời nhất Châu Âu, mang đến trải nghiệm thượng lưu.
+            Tại Coastal Spirits & Wine, chúng tôi không chỉ bán rượu, chúng tôi
+            kể những câu chuyện. Mỗi chai rượu là một kiệt tác được tuyển chọn
+            từ những hầm rượu lâu đời nhất Châu Âu, mang đến trải nghiệm thượng
+            lưu.
           </p>
 
           <div className="mx-auto md:mx-0 w-48">

@@ -11,9 +11,12 @@ const defaultSpecs = [
 ];
 
 const defaultNotes = [
-  { title: "Nose", text: "Hương thơm nồng nàn, lôi cuốn đặc trưng." },
-  { title: "Palate", text: "Vị cân bằng, cấu trúc tốt và êm mượt." },
-  { title: "Finish", text: "Hậu vị kéo dài, để lại ấn tượng sâu sắc." },
+  { title: "Nose", text: "A unique, passionate fragrance." },
+  { title: "Palate", text: "A balanced palate, good structure, and smooth." },
+  {
+    title: "Finish",
+    text: "A long-lasting finish, leaving a deep impression.",
+  },
 ];
 
 export const PRODUCTS_DATA: Product[] = [
@@ -25,7 +28,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "whiskey",
     image: getImg("Scotch"),
     description:
-      "Huyền thoại Single Malt, ủ 18 năm trong thùng gỗ sồi Sherry Oloroso từ Jerez, Tây Ban Nha. Một biểu tượng của sự sang trọng.",
+      "The legendary Single Malt, aged 18 years in Sherry Oloroso oak casks from Jerez, Spain. A symbol of luxury.",
     rating: 4.9,
     reviews: 128,
     isNew: true,
@@ -36,12 +39,12 @@ export const PRODUCTS_DATA: Product[] = [
       { label: "Volume", value: "700ml" },
     ],
     tastingNotes: [
-      { title: "Nose", text: "Trái cây sấy khô, gừng và hương vani." },
+      { title: "Nose", text: "Dried fruit, ginger, and vanilla aromas." },
       {
         title: "Palate",
-        text: "Đậm đà, mượt mà với hương gia vị, đinh hương.",
+        text: "Rich and smooth with spice and clove notes.",
       },
-      { title: "Finish", text: "Kéo dài dai dẳng với hương trái cây sấy." },
+      { title: "Finish", text: "Long-lasting with dried fruit flavors." },
     ],
   },
 
@@ -60,7 +63,7 @@ export const PRODUCTS_DATA: Product[] = [
     ],
     tastingNotes: defaultNotes,
     description:
-      "Dòng Champagne lừng danh thế giới, biểu tượng của tiệc tùng và thành công.",
+      "The world-famous Champagne, a symbol of celebration and success.",
   },
 
   // ============================================================
@@ -74,7 +77,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "whiskey",
     image: getImg("Scotch"),
     description:
-      "Huyền thoại Single Malt, ủ 18 năm trong thùng gỗ sồi Sherry Oloroso.",
+      "The legendary Single Malt, aged 18 years in Sherry Oloroso oak casks.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -86,7 +89,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "whiskey",
     image: getImg("Jack%20Daniels"),
     description:
-      "Tennessee Whiskey iconic với hương than gỗ phong và vani đậm đà.",
+      "Iconic Tennessee Whiskey with smoky maple and rich vanilla notes.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -98,7 +101,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "whiskey",
     image: getImg("Jim%20Beam"),
     description:
-      "Bourbon Kentucky số 1 thế giới, ủ 4 năm, hương gỗ sồi nhẹ nhàng.",
+      "The world's number 1 Kentucky Bourbon, aged 4 years, with a light oak flavor.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -109,7 +112,8 @@ export const PRODUCTS_DATA: Product[] = [
     price: 950000,
     category: "whiskey",
     image: getImg("Johnnie%20Walker"),
-    description: "Phức hợp từ 40 loại whisky, hương khói nhẹ và trái cây khô.",
+    description:
+      "A blend of 40 whiskies, with light smoke and dried fruit notes.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -121,7 +125,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "whiskey",
     image: getImg("Wild%20Turkey"),
     description:
-      "Bourbon nồng độ cao (50.5%), mạnh mẽ với hương vị caramel cháy.",
+      "High-proof Bourbon (50.5%), powerful with burnt caramel flavors.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -132,7 +136,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 850000,
     category: "whiskey",
     image: getImg("Crown%20Royal"),
-    description: "Whisky Canada êm dịu, đựng trong túi nhung tím hoàng gia.",
+    description: "Smooth Canadian Whisky, housed in a royal purple velvet bag.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -144,7 +148,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "whiskey",
     image: getImg("Southern%20Comfort"),
     description:
-      "Rượu mùi whiskey với hương trái cây, gia vị và điểm nhấn của đào.",
+      "Whiskey liqueur with notes of fruit, spices, and a hint of peach.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -156,7 +160,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "whiskey",
     image: getImg("Yukon%20Jack"),
     description:
-      "Rượu mùi mật ong và whiskey Canada, được mệnh danh là 'Huyền thoại phương Bắc'.",
+      "Honey and Canadian whiskey liqueur, known as the 'Legend of the North'.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -172,7 +176,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "rum",
     image: getImg("Bacardi"),
     description:
-      "Rum trắng kinh điển cho Mojito, hương hạnh nhân và trái cây nhiệt đới.",
+      "Classic white rum for Mojitos, with almond and tropical fruit notes.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -183,7 +187,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 350000,
     category: "rum",
     image: getImg("Malibu%20Rum"),
-    description: "Hương dừa tự nhiên, linh hồn của những ly cocktail mùa hè.",
+    description: "Natural coconut flavor, the soul of summer cocktails.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -194,7 +198,8 @@ export const PRODUCTS_DATA: Product[] = [
     price: 550000,
     category: "rum",
     image: getImg("Dark%20Rum"),
-    description: "Rum đen Jamaica đậm đà hương mật rỉ đường và caramel cháy.",
+    description:
+      "Rich Jamaican dark rum with molasses and burnt caramel notes.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -205,7 +210,8 @@ export const PRODUCTS_DATA: Product[] = [
     price: 850000,
     category: "rum",
     image: getImg("Rum"),
-    description: "Biểu tượng của Rum Cuba, hương thuốc lá và cà phê rang.",
+    description:
+      "The symbol of Cuban Rum, with notes of tobacco and roasted coffee.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -216,7 +222,8 @@ export const PRODUCTS_DATA: Product[] = [
     price: 600000,
     category: "rum",
     image: getImg("Cachaca"),
-    description: "Rượu mía Brazil, nguyên liệu chính cho món Caipirinha.",
+    description:
+      "Brazilian sugarcane spirit, the main ingredient for Caipirinha.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -228,7 +235,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "rum",
     image: getImg("Light%20Rum"),
     description:
-      "Rum lâu đời nhất thế giới từ Barbados, hương chuối và hạnh nhân.",
+      "The world's oldest rum from Barbados, with banana and almond notes.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -256,9 +263,6 @@ export const PRODUCTS_DATA: Product[] = [
     tastingNotes: defaultNotes,
   },
 
-  // ============================================================
-  // 4. DANH SÁCH VODKA
-  // ============================================================
   {
     id: 602,
     name: "Absolut Citron",
@@ -267,7 +271,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "vodka",
     image: getImg("Absolut%20Citron"),
     description:
-      "Phiên bản hương chanh vàng nổi tiếng, thành phần chính của Cosmopolitan.",
+      "Famous lemon-flavored version, a key ingredient in Cosmopolitan.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -279,7 +283,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "vodka",
     image: getImg("Absolut%20Kurant"),
     description:
-      "Hương vị quả lý chua đen đặc trưng của Thụy Điển, chua nhẹ và thơm.",
+      "Distinctive blackcurrant flavor from Sweden, slightly tart and aromatic.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -290,7 +294,8 @@ export const PRODUCTS_DATA: Product[] = [
     price: 350000,
     category: "vodka",
     image: getImg("Vodka"),
-    description: "Vodka bán chạy nhất thế giới, lọc qua than hoạt tính 10 lần.",
+    description:
+      "The world's best-selling vodka, filtered through charcoal 10 times.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -301,7 +306,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 500000,
     category: "vodka",
     image: getImg("Absolut%20Peppar"),
-    description: "Vodka hương ớt cay nồng, hoàn hảo cho ly Bloody Mary.",
+    description: "Spicy chili-flavored vodka, perfect for a Bloody Mary.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -316,7 +321,8 @@ export const PRODUCTS_DATA: Product[] = [
     price: 1200000,
     category: "red-wine",
     image: getImg("Port"),
-    description: "Vang cường hóa Bồ Đào Nha, ngọt ngào và đậm vị quả mọng.",
+    description:
+      "Fortified wine from Portugal, sweet and rich in berry flavors.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -328,7 +334,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "red-wine",
     image: getImg("Sweet%20Vermouth"),
     description:
-      "Vang đỏ ngâm thảo mộc, thành phần không thể thiếu của Negroni.",
+      "Red wine infused with herbs, an essential ingredient in Negroni.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -339,7 +345,8 @@ export const PRODUCTS_DATA: Product[] = [
     price: 1850000,
     category: "red-wine",
     image: getImg("Madeira"),
-    description: "Vang đảo Madeira, hương vị caramel và hạt dẻ nướng.",
+    description:
+      "Madeira island wine, with caramel and roasted chestnut flavors.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -350,7 +357,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 650000,
     category: "red-wine",
     image: getImg("Dubonnet%20Rouge"),
-    description: "Rượu vang khai vị của Pháp, yêu thích của Nữ hoàng Anh.",
+    description: "French aperitif wine, a favorite of the Queen of England.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -361,7 +368,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 350000,
     category: "red-wine",
     image: getImg("Wine"),
-    description: "Vang đỏ bàn tiệc, dễ uống, phù hợp dùng hàng ngày.",
+    description: "Red table wine, easy to drink, suitable for daily use.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -373,7 +380,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "red-wine",
     image: getImg("Sloe%20Gin"),
     description:
-      "Vang đỏ đậm đà hương gia vị quế hồi, tuyệt vời khi uống nóng.",
+      "Rich red wine with cinnamon and star anise spices, perfect when served warm.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -384,7 +391,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 550000,
     category: "red-wine",
     image: getImg("Cherry%20Heering"),
-    description: "Rượu vang pha trộn hương cherry đậm đà, ngọt ngào.",
+    description: "Cherry-flavored blended wine, rich and sweet.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -395,7 +402,8 @@ export const PRODUCTS_DATA: Product[] = [
     price: 500000,
     category: "red-wine",
     image: getImg("Creme%20de%20Cassis"),
-    description: "Rượu mùi lý chua đen, thường pha với vang trắng để làm Kir.",
+    description:
+      "Blackcurrant liqueur, often mixed with white wine to make Kir.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -410,8 +418,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 5800000,
     category: "champagne",
     image: getImg("Champagne"),
-    description:
-      "Biểu tượng của sự sang trọng, chỉ sản xuất vào những năm được mùa.",
+    description: "A symbol of luxury, produced only in vintage years.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -422,7 +429,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 450000,
     category: "white-wine",
     image: getImg("Dry%20Vermouth"),
-    description: "Vang trắng khô ngâm thảo mộc, linh hồn của Martini.",
+    description: "Dry white wine infused with herbs, the soul of Martini.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -433,7 +440,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 950000,
     category: "white-wine",
     image: getImg("Sherry"),
-    description: "Vang cường hóa Tây Ban Nha, khô và hương hạt dẻ.",
+    description: "Fortified wine from Spain, dry with chestnut flavors.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -444,7 +451,8 @@ export const PRODUCTS_DATA: Product[] = [
     price: 1450000,
     category: "white-wine",
     image: getImg("White%20Wine"),
-    description: "Vang trắng tươi mát, hương chanh dây và cỏ mới cắt.",
+    description:
+      "Fresh white wine, with passion fruit and freshly cut grass aromas.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -456,7 +464,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: "white-wine",
     image: getImg("Lillet%20Blanc"),
     description:
-      "Rượu khai vị từ Bordeaux, pha trộn giữa vang và rượu mùi cam.",
+      "Aperitif wine from Bordeaux, a blend of wine and orange liqueur.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -467,7 +475,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 1100000,
     category: "white-wine",
     image: getImg("White%20Port"),
-    description: "Phiên bản trắng của rượu Port, ngọt ngào và thơm hương hoa.",
+    description: "The white version of Port wine, sweet and floral.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -478,7 +486,8 @@ export const PRODUCTS_DATA: Product[] = [
     price: 650000,
     category: "champagne",
     image: getImg("Prosecco"),
-    description: "Vang sủi của Ý, hương vị trái cây tươi và bọt sủi nhẹ nhàng.",
+    description:
+      "Italian sparkling wine, with fresh fruit flavors and gentle bubbles.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -489,7 +498,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 550000,
     category: "white-wine",
     image: getImg("Ricard"),
-    description: "Rượu mùi hồi của Pháp, thường pha với nước đá.",
+    description: "French anise-flavored spirit, often mixed with ice.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -500,7 +509,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 1200000,
     category: "white-wine",
     image: getImg("Pernod"),
-    description: "Rượu hương hồi, ông tổ của Absinthe.",
+    description: "Anise-flavored spirit, the ancestor of Absinthe.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -511,7 +520,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 400000,
     category: "white-wine",
     image: getImg("Martini%20Bianco"),
-    description: "Vermouth ngọt của Ý, hương vani và thảo mộc.",
+    description: "Sweet Italian vermouth, with vanilla and herbal aromas.",
     specs: defaultSpecs,
     tastingNotes: defaultNotes,
   },
@@ -520,7 +529,7 @@ export const PRODUCTS_DATA: Product[] = [
 export const STORE_LOCATIONS: StoreLocation[] = [
   {
     id: 1,
-    name: "Webie Cellar An Phu",
+    name: "Costal Spirits Downtown",
     address: "57 Đường số 53, Phường An Phú, TP. Thủ Đức",
     lat: 10.78411388347473,
     lng: 106.74866048347813,

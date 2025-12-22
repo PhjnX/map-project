@@ -26,10 +26,10 @@ const MENU_ITEMS = {
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false); 
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const location = useLocation();
-  const { user, logout } = useAuth(); 
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -55,14 +55,14 @@ export default function Header() {
           >
             <div className="relative">
               <h1 className="font-serif text-3xl md:text-4xl font-bold text-white tracking-widest group-hover:text-[#D4AF37] transition-colors duration-500">
-                WEBIE
+                COASTAL
               </h1>
               <span className="absolute -right-3 top-0 text-[#D4AF37] text-4xl leading-none">
                 .
               </span>
             </div>
             <span className="text-[10px] md:text-[11px] font-sans font-medium text-[#D4AF37] tracking-[0.6em] uppercase mt-1 border-t border-[#D4AF37]/30 pt-1 w-full text-center group-hover:border-[#D4AF37] transition-all">
-              Cellars
+              SPIRITS & WINE
             </span>
           </Link>
 

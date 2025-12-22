@@ -103,7 +103,7 @@ export default function AboutPage() {
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
-          className="relative z-20 text-center px-4 max-w-4xl pb-20" 
+          className="relative z-20 text-center px-4 max-w-4xl pb-20"
         >
           <motion.p
             variants={fadeInUp}
@@ -127,7 +127,6 @@ export default function AboutPage() {
             Where passion meets perfection
           </motion.p>
         </motion.div>
-
       </div>
 
       <section className="relative z-20 -mt-24 md:-mt-32 container mx-auto px-6 pb-24">
@@ -182,9 +181,10 @@ export default function AboutPage() {
               className="space-y-6 text-white/60 text-base leading-relaxed font-light text-justify pr-0 lg:pr-10"
             >
               <p>
-                Webie Cellars didn't begin with spreadsheets. It started with a
-                fateful trip to Bordeaux in 1998. There, amidst the vast
-                vineyards, we understood that wine is a living art form.
+                Coastal Spirits & Wine didn't begin with spreadsheets. It
+                started with a fateful trip to Bordeaux in 1998. There, amidst
+                the vast vineyards, we understood that wine is a living art
+                form.
               </p>
               <p>
                 For over two decades, from a humble shop in District 1, we have

@@ -27,49 +27,49 @@ const CATEGORY_INFO: Record<
 > = {
   "all-products": {
     title: "Grand Collection",
-    desc: "Khám phá toàn bộ kho tàng hương vị thượng hạng của Webie Wine. Từ những hầm rượu vang cổ kính đến những dòng rượu mạnh đầy cá tính.",
+    desc: "Explore Coastal Spirits & Wine's entire treasure trove of premium flavors. From ancient wine cellars to strong wines full of personality.",
     banner: WineBanner,
   },
   "red-wine": {
     title: "Red Wines",
-    desc: "Khám phá sự đậm đà, quyến rũ của những chai vang đỏ từ Bordeaux đến Napa Valley.",
+    desc: "Explore the rich, seductive world of red wines from Bordeaux to Napa Valley.",
     banner: RedWineBanner,
   },
   "white-wine": {
     title: "White Wines",
-    desc: "Sự tươi mát, thanh thoát từ những giống nho Chardonnay, Sauvignon Blanc trứ danh.",
+    desc: "Explore the fresh, crisp world of renowned Chardonnay and Sauvignon Blanc grapes.",
     banner: WhiteWineBanner,
   },
   champagne: {
     title: "Fine Champagne",
-    desc: "Biểu tượng của sự ăn mừng và đẳng cấp thượng lưu từ vùng Champagne nước Pháp.",
+    desc: "The symbol of celebration and high-class luxury from the Champagne region of France.",
     banner: ChampagneWineBanner,
   },
   whiskey: {
     title: "Premium Whiskey",
-    desc: "Từ Single Malt khói than bùn Scotland đến Bourbon ngọt ngào của Mỹ.",
+    desc: "From smoky Scottish Single Malts to sweet American Bourbons.",
     banner: WhiskeyBanner,
   },
   cognac: {
     title: "Exquisite Cognac",
-    desc: "Dòng rượu mạnh quý tộc ủ lâu năm trong thùng gỗ sồi Pháp.",
+    desc: "The noble spirit aged for years in French oak barrels.",
     banner:
       "https://images.unsplash.com/photo-1615887023516-9b6bcd559e87?q=80&w=1600&auto=format&fit=crop",
   },
   vodka: {
     title: "Luxury Vodka",
-    desc: "Sự tinh khiết tuyệt đối, hoàn hảo cho mọi ly cocktail đẳng cấp.",
+    desc: "Absolute purity, perfect for every classy cocktail.",
     banner: VodkaWineBanner,
   },
   rum: {
     title: "Caribbean Rum",
-    desc: "Hương vị của biển cả và những hòn đảo nhiệt đới.",
+    desc: "The flavors of the sea and tropical islands.",
     banner:
       "https://images.unsplash.com/photo-1614313511387-1436a4480ebb?q=80&w=1600&auto=format&fit=crop",
   },
   default: {
     title: "Our Collections",
-    desc: "Tuyển chọn những hương vị tinh túy nhất thế giới.",
+    desc: "A curated selection of the world's finest flavors.",
     banner:
       "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?q=80&w=1600&auto=format&fit=crop",
   },
@@ -125,7 +125,6 @@ export default function CategoryPage() {
 
   return (
     <div className="bg-[#050505] min-h-screen text-white font-sans selection:bg-[#D4AF37] selection:text-black">
-    
       <div className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img

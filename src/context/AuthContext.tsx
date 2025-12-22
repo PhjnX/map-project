@@ -26,7 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("webie_user");
+    const storedUser = localStorage.getItem("coastalspirits");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
@@ -37,16 +37,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return new Promise((resolve) => {
       setTimeout(() => {
-        if (email === "webie_user@gmail.com" && pass === "123123123") {
+        if (email === "coastalspirits@gmail.com" && pass === "123123123") {
           const fakeUser = {
-            name: "Mr. Webie",
+            name: "Mr. Coastal Spirits",
             email: email,
             avatar:
               "https://images.unsplash.com/photo-1559526323-cb2f2fe2591b?q=80&w=200&auto=format&fit=crop",
           };
           setUser(fakeUser);
-          localStorage.setItem("webie_user", JSON.stringify(fakeUser)); 
-          resolve(true); 
+          localStorage.setItem("coastalspirits", JSON.stringify(fakeUser));
+          resolve(true);
         } else {
           resolve(false);
         }
@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("webie_user");
+    localStorage.removeItem("coastalspirits");
   };
 
   return (

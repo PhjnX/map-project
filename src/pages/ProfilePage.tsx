@@ -11,7 +11,9 @@ export default function ProfilePage() {
             W
           </div>
           <h2 className="text-2xl font-bold text-[#2C3324]">Member</h2>
-          <p className="text-gray-500 mb-6">Gold Tier - Webie Cellars</p>
+          <p className="text-gray-500 mb-6">
+            Gold Tier - Coastal Spirits & Wine
+          </p>
           <button className="w-full border border-[#E05D48] text-[#E05D48] py-2 rounded-lg font-bold hover:bg-[#E05D48] hover:text-white transition-colors">
             Edit Profile
           </button>

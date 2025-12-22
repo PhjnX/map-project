@@ -45,8 +45,8 @@ export default function Footer() {
               About Us
             </h4>
             <p className="text-sm leading-relaxed font-light">
-              Webie Cellars curates the finest spirits from around the globe. We
-              believe in quality, heritage, and the art of tasting.
+              Coastal Spirits & Wine curates the finest spirits from around the
+              globe. We believe in quality, heritage, and the art of tasting.
             </p>
             <div className="flex gap-4">
               <a
@@ -166,14 +166,14 @@ export default function Footer() {
                 href="mailto:support@webie.vn"
                 className="hover:text-[#D4AF37] transition-colors underline decoration-white/20 underline-offset-4"
               >
-                support@webie.vn
+                support@coastalspirits.vn
               </a>
             </div>
           </div>
         </div>
 
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-widest font-bold text-white/30">
-          <p>&copy; 2025 Webie Cellars. All rights reserved.</p>
+          <p>&copy; 2025 Coastal Spirits & Wine. All rights reserved.</p>
           <p className="text-[#D4AF37]">Drink Responsibly • 18+</p>
         </div>
       </div>

@@ -159,11 +159,10 @@ const PickupModal = ({
 }) => {
   const [date, setDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState("");
-
   const timeSlots = useMemo(() => generateTimeSlots(date), [date]);
 
   return (
-    <div className="absolute inset-0 z-2000 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div className="absolute inset-0 z-[2000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -175,18 +174,16 @@ const PickupModal = ({
         >
           <FaTimes />
         </button>
-
         <div className="bg-[#D4AF37] p-5 text-center">
           <h2 className="font-bold text-black uppercase tracking-widest text-lg">
-            Đặt Lịch Pickup
+            Schedule Pickup
           </h2>
           <p className="text-xs mt-1 text-black/80">{store.name}</p>
         </div>
-
         <div className="p-6 max-h-[70vh] overflow-y-auto">
           <div className="mb-6">
             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
-              1. Chọn ngày lấy hàng
+              1. Select Date
             </label>
             <input
               type="date"
@@ -199,19 +196,23 @@ const PickupModal = ({
               style={{ colorScheme: "light" }}
             />
           </div>
-
           <div className="mb-6">
             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">
-              2. Khung giờ (
-              {date ? `Thứ ${new Date(date).getDay() + 1}` : "..."})
+              2. Time Slot (
+              {date
+                ? new Date(date).toLocaleDateString("en-US", {
+                    weekday: "long",
+                  })
+                : "..."}
+              )
             </label>
             {!date ? (
               <p className="text-xs text-gray-400 italic">
-                Vui lòng chọn ngày trước.
+                Please select a date first.
               </p>
             ) : timeSlots.length === 0 ? (
               <p className="text-xs text-red-500 font-bold">
-                Cửa hàng đóng cửa hoặc hết giờ phục vụ hôm nay.
+                Store closed or no slots available today.
               </p>
             ) : (
               <div className="grid grid-cols-4 gap-2">
@@ -231,13 +232,12 @@ const PickupModal = ({
               </div>
             )}
           </div>
-
           <button
             disabled={!date || !selectedSlot}
             onClick={onConfirm}
             className="w-full bg-[#D4AF37] text-black py-4 font-bold uppercase tracking-[0.2em] text-xs hover:bg-black hover:text-[#D4AF37] disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded shadow-lg"
           >
-            Xác Nhận Đặt Lịch
+            Confirm Pickup
           </button>
         </div>
       </motion.div>
@@ -311,12 +311,10 @@ export default function OrderPage() {
   useEffect(() => {
     if (!user) setShowLoginModal(true);
   }, [user]);
-
   const handleCloseLogin = () => {
     setShowLoginModal(false);
     if (!user) navigate("/");
   };
-
   useEffect(() => {
     const t = setTimeout(() => setIsMapReady(true), 800);
     return () => clearTimeout(t);
@@ -326,10 +324,8 @@ export default function OrderPage() {
 
   const [viewMode, setViewMode] = useState<"order" | "locations">("order");
   const [orderTab, setOrderTab] = useState<"delivery" | "pickup">("delivery");
-
   const [mapCenter, setMapCenter] = useState<LatLngExpression>(DEFAULT_CENTER);
   const [mapZoom, setMapZoom] = useState(13);
-
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     null
   );
@@ -340,10 +336,8 @@ export default function OrderPage() {
     km: number;
     minutes: number;
   } | null>(null);
-
   const [showPickupModal, setShowPickupModal] = useState(false);
   const [showStoreDetail, setShowStoreDetail] = useState(false);
-
   const [modalStatus, setModalStatus] = useState<{
     show: boolean;
     type: "success" | "error" | "warning";
@@ -362,20 +356,18 @@ export default function OrderPage() {
       setModalStatus({
         show: true,
         type: "error",
-        title: "Thiếu thông tin",
-        message: "Vui lòng chọn địa điểm giao hàng trước.",
+        title: "Missing Information",
+        message: "Please select a delivery location first.",
       });
       return;
     }
-
     const shippingFee = 15000 + deliveryInfo.km * 5000;
     const roundedFee = Math.round(shippingFee / 1000) * 1000;
-
     setModalStatus({
       show: true,
       type: "success",
-      title: "Chuyển đến thanh toán",
-      message: `Phí ship: ${roundedFee.toLocaleString()}đ cho ${
+      title: "Proceeding to Payment",
+      message: `Shipping Fee: ${roundedFee.toLocaleString()}đ for ${
         deliveryInfo.km
       }km`,
     });
@@ -405,26 +397,24 @@ export default function OrderPage() {
     setModalStatus({
       show: true,
       type: "success",
-      title: "Thành công",
-      message: "Đơn hàng Pickup đã được ghi nhận!",
+      title: "Success",
+      message: "Pickup order confirmed!",
     });
   };
 
   const checkDeliveryLogic = async (lat: number, lng: number) => {
     const dist = calculateDistance(lat, lng, THE_STORE.lat, THE_STORE.lng);
-
     if (dist < 0.03) {
       setRoutePolyline([]);
       setDeliveryInfo({ km: 0, minutes: 0 });
       setModalStatus({
         show: true,
         type: "success",
-        title: "Tại Cửa Hàng",
-        message: "Bạn đang ở ngay tại Store!",
+        title: "At Store",
+        message: "You are currently at the Store!",
       });
       return;
     }
-
     try {
       const response = await fetch(
         `https://router.project-osrm.org/route/v1/driving/${lng},${lat};${THE_STORE.lng},${THE_STORE.lat}?overview=full&geometries=geojson`
@@ -445,21 +435,18 @@ export default function OrderPage() {
     } catch {
       setDeliveryInfo({ km: dist, minutes: Math.ceil(dist * 3) + 15 });
     }
-
     if (dist > 15) {
       setModalStatus({
         show: true,
         type: "warning",
-        title: "Hơn 15km",
-        message: "Vì khoảng cách vượt quá 15km, shop sẽ thu phí ship đặc biệt.",
+        title: "Over 15km",
+        message: "Due to distance over 15km, special shipping fee applies.",
       });
     }
   };
 
   const handleManualSearch = async () => {
-    // 1. Validate Input
     if (!addressInput.trim()) return;
-
     setIsProcessing(true);
     setDeliveryInfo(null);
     setRoutePolyline([]);
@@ -483,13 +470,10 @@ export default function OrderPage() {
     try {
       let data = [];
       let searchLevel = "exact";
-
       const lowerInput = addressInput.toLowerCase();
-
       let cleanInput = lowerInput
         .replace(/\s+(phường|xã|thị trấn)\s+/g, ", ")
         .replace(/\s+(quận|huyện|thành phố|tỉnh|tp)\s+/g, ", ");
-
       const streetKeywords = [
         "đường",
         "phố",
@@ -509,16 +493,12 @@ export default function OrderPage() {
         }
       }
 
-      console.log("Tìm Level 1 (Optimized):", streetPart);
       data = await searchOSM(streetPart);
       if (data.length > 0) searchLevel = "optimized";
-
       if (!data || data.length === 0) {
-        console.log("Tìm Level 2 (Exact):", addressInput);
         data = await searchOSM(addressInput);
         if (data.length > 0) searchLevel = "exact";
       }
-
       if (!data || data.length === 0) {
         const parts = streetPart
           .split(",")
@@ -526,16 +506,15 @@ export default function OrderPage() {
           .filter((p) => p);
         if (parts.length >= 2) {
           const areaQuery = parts.slice(-2).join(", ");
-          console.log("Tìm Level 3 (Admin Area):", areaQuery);
           data = await searchOSM(areaQuery);
           if (data.length > 0) searchLevel = "administrative";
         }
       }
+
       if (data && data.length > 0) {
         const { lat, lon, display_name } = data[0];
         const latitude = parseFloat(lat);
         const longitude = parseFloat(lon);
-
         setUserLocation([latitude, longitude]);
 
         if (searchLevel === "administrative") {
@@ -543,28 +522,27 @@ export default function OrderPage() {
           setModalStatus({
             show: true,
             type: "warning",
-            title: "Ghim tương đối",
-            message: `Không tìm thấy tên đường trong dữ liệu bản đồ. Hệ thống đã ghim tại trung tâm ${
+            title: "Approximate Location",
+            message: `Street name not found. Pinned to center of ${
               display_name.split(",")[0]
-            }. Vui lòng KÉO GHIM về đúng nhà.`,
+            }. Please DRAG PIN to your exact house.`,
           });
         } else if (searchLevel === "optimized") {
           setModalStatus({
             show: true,
             type: "warning",
-            title: "Tìm thấy đường",
+            title: "Street Found",
             message:
-              "Đã định vị được con đường. Vui lòng KÉO GHIM đỏ về đúng số nhà của bạn.",
+              "Street located. Please DRAG RED PIN to your exact number.",
           });
         } else {
           setModalStatus({
             show: true,
             type: "warning",
-            title: "Kiểm tra vị trí",
-            message: "Vui lòng kiểm tra và KÉO GHIM nếu vị trí chưa chính xác.",
+            title: "Check Location",
+            message: "Please check and DRAG PIN if inaccurate.",
           });
         }
-
         setMapCenter([latitude, longitude]);
         setMapZoom(16);
         await checkDeliveryLogic(latitude, longitude);
@@ -572,14 +550,13 @@ export default function OrderPage() {
         setModalStatus({
           show: true,
           type: "error",
-          title: "Không tìm thấy",
-          message:
-            "Rất tiếc, không định vị được khu vực này. Hãy thử nhập tên một tòa nhà lớn hoặc giao lộ gần đó.",
+          title: "Not Found",
+          message: "Sorry, location not found. Try a major landmark nearby.",
         });
       }
     } catch (e) {
       console.error(e);
-      alert("Lỗi kết nối bản đồ.");
+      alert("Map connection error.");
     }
     setIsProcessing(false);
   };
@@ -595,13 +572,13 @@ export default function OrderPage() {
         setUserLocation([latitude, longitude]);
         setMapCenter([latitude, longitude]);
         setMapZoom(18);
-        setAddressInput("Vị trí của bạn (Kéo ghim để chỉnh)");
+        setAddressInput("Current Location (Drag pin to adjust)");
         checkDeliveryLogic(latitude, longitude);
         setIsProcessing(false);
       },
       () => {
         setIsProcessing(false);
-        alert("Không lấy được vị trí.");
+        alert("Unable to retrieve location.");
       },
       { enableHighAccuracy: true }
     );
@@ -616,7 +593,7 @@ export default function OrderPage() {
           setUserLocation([lat, lng]);
           checkDeliveryLogic(lat, lng);
           setAddressInput(
-            `Ghim đã chỉnh (${lat.toFixed(4)}, ${lng.toFixed(4)})`
+            `Pin Adjusted (${lat.toFixed(4)}, ${lng.toFixed(4)})`
           );
         }
       },
@@ -636,7 +613,6 @@ export default function OrderPage() {
 
   return (
     <div className="flex flex-col h-screen bg-[#050505] font-sans overflow-hidden text-white selection:bg-[#D4AF37] selection:text-black">
-      {/* HEADER */}
       <header className="h-16 bg-[#0a0a0a] border-b border-[#D4AF37]/20 flex items-center px-6 justify-between z-40 relative shadow-lg shrink-0">
         <div className="flex items-center gap-4">
           <button
@@ -645,7 +621,7 @@ export default function OrderPage() {
           >
             <FaArrowLeft size={16} />
           </button>
-          <div className="h-4 w-[1px] bg-white/10"></div>
+          <div className="h-4 w-px bg-white/10"></div>
           <h1 className="font-serif text-lg tracking-wider text-white">
             ORDER <span className="text-[#D4AF37] italic">FULFILLMENT</span>
           </h1>
@@ -675,11 +651,11 @@ export default function OrderPage() {
               : "text-white/30 hover:text-white"
           }`}
         >
-          Đặt Hàng
+          Order
           {viewMode === "order" && (
             <motion.div
               layoutId="tab-indicator"
-              className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#D4AF37]"
+              className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#D4AF37]"
             />
           )}
         </button>
@@ -696,24 +672,24 @@ export default function OrderPage() {
               : "text-white/30 hover:text-white"
           }`}
         >
-          Hệ Thống Webie
+          Coastal Spirits Locations
           {viewMode === "locations" && (
             <motion.div
               layoutId="tab-indicator"
-              className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#D4AF37]"
+              className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#D4AF37]"
             />
           )}
         </button>
       </div>
 
       <div className="flex flex-1 md:flex-row h-full relative overflow-hidden">
+        {/* SIDEBAR */}
         <div
           className={`absolute top-0 left-0 bottom-0 w-full md:w-[400px] bg-[#0F0F0F] z-20 shadow-[10px_0_30px_rgba(0,0,0,0.5)] flex flex-col border-r border-[#D4AF37]/10 transition-transform duration-300 ${
             viewMode === "order" ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           <div className="p-8 h-full flex flex-col overflow-y-auto">
-            {/* Delivery / Pickup Switch */}
             <div className="bg-black/40 p-1 rounded border border-white/10 flex mb-6 shrink-0">
               <button
                 onClick={handleSwitchToDelivery}
@@ -741,14 +717,14 @@ export default function OrderPage() {
               <div className="space-y-6 animate-fadeIn">
                 <div className="space-y-2">
                   <label className="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest">
-                    Địa chỉ nhận hàng
+                    Delivery Address
                   </label>
                   <div className="relative group">
                     <input
                       type="text"
                       value={addressInput}
                       onChange={(e) => setAddressInput(e.target.value)}
-                      placeholder="Nhập số nhà, tên đường..."
+                      placeholder="Enter house number, street name..."
                       className="w-full pl-9 pr-4 py-3 bg-white/5 border border-white/10 focus:border-[#D4AF37] rounded outline-none transition text-white text-sm font-light"
                     />
                     <FaSearch className="absolute left-3 top-3.5 text-white/30 text-xs group-focus-within:text-[#D4AF37] transition-colors" />
@@ -757,8 +733,7 @@ export default function OrderPage() {
                     )}
                   </div>
                   <p className="text-[10px] text-[#D4AF37] italic mt-1 animate-pulse">
-                    * Lưu ý: Hãy kéo thả ghim đỏ trên bản đồ để chốt vị trí
-                    chính xác nhất.
+                    * Note: Drag the pin to adjust the exact location.
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -767,12 +742,12 @@ export default function OrderPage() {
                     disabled={isProcessing}
                     className="flex-1 bg-white/10 text-white font-bold py-3 rounded hover:bg-white/20 transition tracking-widest text-[10px] uppercase"
                   >
-                    Tìm Địa Chỉ
+                    Find Address
                   </button>
                   <button
                     onClick={handleUseCurrentLocation}
                     className="px-4 bg-[#D4AF37] text-black rounded hover:bg-white transition"
-                    title="Dùng vị trí hiện tại"
+                    title="Use Current Location"
                   >
                     <FaLocationArrow />
                   </button>
@@ -807,12 +782,11 @@ export default function OrderPage() {
                         </span>
                       </div>
                     </div>
-
                     <button
                       onClick={handleCheckout}
                       className="w-full bg-[#D4AF37] text-black font-bold uppercase tracking-[0.2em] py-4 text-[10px] hover:bg-white hover:scale-[1.02] active:scale-95 transition-all shadow-lg rounded flex items-center justify-center gap-2"
                     >
-                      <FaShippingFast size={14} /> Tiến hành thanh toán
+                      <FaShippingFast size={14} /> Proceed to Payment
                     </button>
                   </div>
                 )}
@@ -835,7 +809,7 @@ export default function OrderPage() {
                     onClick={() => setShowPickupModal(true)}
                     className="w-full border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest py-3 rounded hover:bg-white hover:text-black transition-colors"
                   >
-                    Đặt Lịch & Lấy Hàng
+                    Schedule Pickup
                   </button>
                 </div>
               </div>
@@ -858,14 +832,12 @@ export default function OrderPage() {
               />
               <ZoomControl position="bottomright" />
               <MapController center={mapCenter} zoom={mapZoom} />
-
               {routePolyline.length > 0 && orderTab === "delivery" && (
                 <Polyline
                   positions={routePolyline}
                   pathOptions={{ color: "#D4AF37", weight: 6, opacity: 0.9 }}
                 />
               )}
-
               {userLocation && (
                 <Marker
                   position={userLocation}
@@ -877,12 +849,11 @@ export default function OrderPage() {
                 >
                   <Popup>
                     <span className="text-black font-bold text-xs">
-                      Giao hàng tại đây <br /> (Kéo ghim để chỉnh)
+                      Deliver here <br /> (Drag to adjust)
                     </span>
                   </Popup>
                 </Marker>
               )}
-
               {showStoreMarker && (
                 <Marker
                   position={[THE_STORE.lat, THE_STORE.lng]}
@@ -901,7 +872,7 @@ export default function OrderPage() {
                         <span className="font-bold text-black block">
                           {THE_STORE.name}
                         </span>
-                        <span className="text-[9px]">Điểm nhận hàng</span>
+                        <span className="text-[9px]">Pickup Point</span>
                       </div>
                     </Popup>
                   )}
@@ -968,7 +939,6 @@ export default function OrderPage() {
           </AnimatePresence>
         </div>
       </div>
-
       <LoginModal isOpen={showLoginModal} onClose={handleCloseLogin} />
     </div>
   );
