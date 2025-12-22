@@ -201,13 +201,14 @@ export default function AboutPage() {
                   <img
                     src={Bee}
                     className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all"
-                    alt="Mr. Webie"
+                    alt="Mr. Coastal Spirits & Wine"
                   />
                 </div>
               </div>
               <div>
                 <p className="text-white text-base uppercase tracking-widest font-bold">
-                  Mr. Webie
+                                    Mr. Coastal Spirits & Wine
+
                 </p>
                 <p className="text-gold text-[10px] tracking-[0.2em] uppercase opacity-80 mt-1">
                   Founder & Sommelier

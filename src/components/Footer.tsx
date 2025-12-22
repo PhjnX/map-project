@@ -164,7 +164,7 @@ export default function Footer() {
                 0909 123 456
               </p>
               <a
-                href="mailto:support@webie.vn"
+                href="mailto:support@coastalspirits.ca"
                 className="hover:text-[#D4AF37] transition-colors underline decoration-white/20 underline-offset-4"
               >
                 support@coastalspirits.ca

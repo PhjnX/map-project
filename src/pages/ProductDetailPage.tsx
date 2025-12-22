@@ -170,7 +170,7 @@ export default function ProductDetailPage() {
                     style={{ transformOrigin: `${view.x} ${view.y}` }}
                   />
                   <div className="absolute top-4 right-4 text-white/5 font-serif font-black text-6xl select-none z-0">
-                    WEBIE
+                    W
                   </div>
                 </div>
 
