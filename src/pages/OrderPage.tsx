@@ -682,7 +682,7 @@ export default function OrderPage() {
               : "text-white/30 hover:text-white"
           }`}
         >
-          Webie Locations
+          Coastal Spirits & Winecations
           {viewMode === "locations" && (
             <motion.div
               layoutId="tab-indicator"
